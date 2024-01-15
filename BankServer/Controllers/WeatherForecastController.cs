@@ -14,15 +14,18 @@ namespace BankServer.Controllers
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly BankContext _bankContext;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, BankContext bankContext)
         {
             _logger = logger;
+            _bankContext = bankContext;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
+
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),

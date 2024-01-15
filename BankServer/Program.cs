@@ -1,4 +1,6 @@
+using BankServer;
 using Microsoft.AspNetCore.Authentication.Negotiate;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,9 @@ builder.Services.AddAuthorization(options =>
     // By default, all incoming requests will be authorized according to the default policy.
     options.FallbackPolicy = options.DefaultPolicy;
 });
+
+var connection = builder.Configuration.GetConnectionString("WebApiDatabase");
+builder.Services.AddDbContext<BankContext>(options => options.UseSqlServer(connection));
 
 var app = builder.Build();
 
