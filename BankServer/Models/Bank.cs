@@ -18,6 +18,6 @@ namespace BankServer.Models
         [StringLength(50)]
         public string Phone { get; set; }
 
-        public virtual ICollection<Transaction> Transactions { get; set; }
+        //public virtual ICollection<Transaction> Transactions { get; set; }
     }
 }

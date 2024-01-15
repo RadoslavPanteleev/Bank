@@ -27,9 +27,9 @@ namespace BankServer.Models
         [Required]
         public Category Category { get; set; }
 
-        public virtual ICollection<Bank> Banks { get; set; }
-        public virtual ICollection<Category> Categories { get; set; }
-        public virtual ICollection<Location> Locations { get; set; }
-        public virtual ICollection<Person> People { get; set; }
+        //public virtual ICollection<Bank> Banks { get; set; }
+        //public virtual ICollection<Category> Categories { get; set; }
+        //public virtual ICollection<Location> Locations { get; set; }
+        //public virtual ICollection<Person> People { get; set; }
     }
 }

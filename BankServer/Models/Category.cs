@@ -14,6 +14,6 @@ namespace BankServer.Models
         [StringLength(100)]
         public string Description { get; set; }
 
-        public virtual ICollection<Transaction> Transactions { get; set; }
+        //public virtual ICollection<Transaction> Transactions { get; set; }
     }
 }

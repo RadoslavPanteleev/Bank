@@ -1,13 +1,13 @@
 ﻿using BankServer.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BankServer
 {
-    public class BankContext : DbContext
+    public class BankContext : IdentityDbContext<Person>
     {
         public BankContext(DbContextOptions<BankContext> options) : base(options)
         {
-
         }
 
         // Entities

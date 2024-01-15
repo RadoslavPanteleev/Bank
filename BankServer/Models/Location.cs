@@ -19,6 +19,6 @@ namespace BankServer.Models
         [Required]
         public double Longitude { get; set; }
 
-        public virtual ICollection<Transaction> Transactions { get; set; }
+        //public virtual ICollection<Transaction> Transactions { get; set; }
     }
 }

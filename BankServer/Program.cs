@@ -1,6 +1,7 @@
 using BankServer;
 using Microsoft.AspNetCore.Authentication.Negotiate;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,9 +22,13 @@ builder.Services.AddAuthorization(options =>
 });
 
 var connection = builder.Configuration.GetConnectionString("WebApiDatabase");
-builder.Services.AddDbContext<BankContext>(options => options.UseSqlServer(connection));
+builder.Services.AddDbContextPool<BankContext>(options => options.UseSqlServer(connection));
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+using (var context = scope.ServiceProvider.GetService<BankContext>())
+    context?.Database.EnsureCreated();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -36,7 +41,6 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
