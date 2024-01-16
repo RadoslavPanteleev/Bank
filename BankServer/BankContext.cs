@@ -19,7 +19,6 @@ namespace BankServer
                 .WithMany().OnDelete(DeleteBehavior.Restrict);
         }
 
-
         // Entities
         public DbSet<Bank> Banks { get; set; }
         public DbSet<Category> Categories { get; set; }

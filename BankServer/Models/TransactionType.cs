@@ -1,9 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BankServer.Models.Base;
+using Swashbuckle.AspNetCore.Annotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace BankServer.Models
 {
-    public class TransactionType
+    /// <summary>
+    /// TransactionType
+    /// </summary>
+    public class TransactionType : BaseModel
     {
+        [SwaggerSchema(Description = "Field for internal use only", Nullable = true)]
         public int ID { get; set; }
 
         [Required]
