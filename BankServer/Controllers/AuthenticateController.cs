@@ -1,5 +1,4 @@
-﻿using BankMiddle.Models;
-using BankServer.Models;
+﻿using BankServer.Models;
 using JWTAuthentication.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

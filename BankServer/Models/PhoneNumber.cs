@@ -2,12 +2,12 @@
 
 namespace BankServer.Models
 {
-    public class TransactionType
+    public class PhoneNumber
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [StringLength(100)]
-        public string? Type { get; set; }
+        public string? Phone { get; set; }
     }
 }

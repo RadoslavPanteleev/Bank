@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BankMiddle\BankMiddle.csproj" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

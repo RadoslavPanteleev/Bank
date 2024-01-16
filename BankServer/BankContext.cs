@@ -10,6 +10,16 @@ namespace BankServer
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<Transaction>()
+                .HasOne(m => m.Bank)
+                .WithMany().OnDelete(DeleteBehavior.Restrict);
+        }
+
+
         // Entities
         public DbSet<Bank> Banks { get; set; }
         public DbSet<Category> Categories { get; set; }

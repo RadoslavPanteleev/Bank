@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankServer.Migrations
 {
     [DbContext(typeof(BankContext))]
-    [Migration("20240115223505_BANK")]
+    [Migration("20240116165625_BANK")]
     partial class BANK
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,48 @@ namespace BankServer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("BankServer.Models.Account", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("AccountNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("PersonId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PersonId");
+
+                    b.ToTable("Account");
+                });
+
+            modelBuilder.Entity("BankServer.Models.Address", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Address");
+                });
 
             modelBuilder.Entity("BankServer.Models.Bank", b =>
                 {
@@ -42,12 +84,12 @@ namespace BankServer.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int>("PhoneNumberId")
+                        .HasColumnType("int");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("PhoneNumberId");
 
                     b.ToTable("Banks");
                 });
@@ -77,16 +119,14 @@ namespace BankServer.Migrations
 
             modelBuilder.Entity("BankServer.Models.Location", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                    b.Property<int?>("AddressId")
+                        .HasColumnType("int");
 
                     b.Property<double>("Latitude")
                         .HasColumnType("float");
@@ -99,7 +139,9 @@ namespace BankServer.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
 
                     b.ToTable("Locations");
                 });
@@ -112,15 +154,8 @@ namespace BankServer.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("AccountNumber")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                    b.Property<int?>("AddressId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -160,11 +195,11 @@ namespace BankServer.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<int>("PhoneNumberId")
+                        .HasColumnType("int");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -178,6 +213,8 @@ namespace BankServer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AddressId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -186,7 +223,27 @@ namespace BankServer.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+                    b.HasIndex("PhoneNumberId");
+
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("BankServer.Models.PhoneNumber", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PhoneNumber");
                 });
 
             modelBuilder.Entity("BankServer.Models.Transaction", b =>
@@ -197,37 +254,36 @@ namespace BankServer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
 
+                    b.Property<int?>("AccountId")
+                        .HasColumnType("int");
+
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
-                    b.Property<int>("BankID")
+                    b.Property<int?>("BankID")
                         .HasColumnType("int");
 
-                    b.Property<int>("CategoryID")
+                    b.Property<int?>("CategoryID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("LocationID")
+                    b.Property<int?>("LocationId")
                         .HasColumnType("int");
 
-                    b.Property<string>("PersonId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("TypeID")
+                    b.Property<int?>("TypeID")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("AccountId");
 
                     b.HasIndex("BankID");
 
                     b.HasIndex("CategoryID");
 
-                    b.HasIndex("LocationID");
-
-                    b.HasIndex("PersonId");
+                    b.HasIndex("LocationId");
 
                     b.HasIndex("TypeID");
 
@@ -385,45 +441,83 @@ namespace BankServer.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("BankServer.Models.Transaction", b =>
+            modelBuilder.Entity("BankServer.Models.Account", b =>
                 {
-                    b.HasOne("BankServer.Models.Bank", "Bank")
-                        .WithMany()
-                        .HasForeignKey("BankID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BankServer.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BankServer.Models.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("BankServer.Models.Person", "Person")
                         .WithMany()
                         .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BankServer.Models.TransactionType", "Type")
+                    b.Navigation("Person");
+                });
+
+            modelBuilder.Entity("BankServer.Models.Bank", b =>
+                {
+                    b.HasOne("BankServer.Models.PhoneNumber", "PhoneNumber")
                         .WithMany()
-                        .HasForeignKey("TypeID")
+                        .HasForeignKey("PhoneNumberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PhoneNumber");
+                });
+
+            modelBuilder.Entity("BankServer.Models.Location", b =>
+                {
+                    b.HasOne("BankServer.Models.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId");
+
+                    b.Navigation("Address");
+                });
+
+            modelBuilder.Entity("BankServer.Models.Person", b =>
+                {
+                    b.HasOne("BankServer.Models.Address", "Address")
+                        .WithMany()
+                        .HasForeignKey("AddressId");
+
+                    b.HasOne("BankServer.Models.PhoneNumber", "PhoneNumber")
+                        .WithMany()
+                        .HasForeignKey("PhoneNumberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Address");
+
+                    b.Navigation("PhoneNumber");
+                });
+
+            modelBuilder.Entity("BankServer.Models.Transaction", b =>
+                {
+                    b.HasOne("BankServer.Models.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId");
+
+                    b.HasOne("BankServer.Models.Bank", "Bank")
+                        .WithMany()
+                        .HasForeignKey("BankID");
+
+                    b.HasOne("BankServer.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryID");
+
+                    b.HasOne("BankServer.Models.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId");
+
+                    b.HasOne("BankServer.Models.TransactionType", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeID");
+
+                    b.Navigation("Account");
 
                     b.Navigation("Bank");
 
                     b.Navigation("Category");
 
                     b.Navigation("Location");
-
-                    b.Navigation("Person");
 
                     b.Navigation("Type");
                 });

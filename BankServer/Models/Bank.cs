@@ -8,16 +8,13 @@ namespace BankServer.Models
 
         [Required]
         [StringLength(100)]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [Required]
         [StringLength(200)]
-        public string Address { get; set; }
+        public string? Address { get; set; }
 
         [Required]
-        [StringLength(50)]
-        public string Phone { get; set; }
-
-        //public virtual ICollection<Transaction> Transactions { get; set; }
+        public PhoneNumber? PhoneNumber{ get; set; }
     }
 }
