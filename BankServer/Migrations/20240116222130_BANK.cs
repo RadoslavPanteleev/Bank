@@ -10,16 +10,17 @@ namespace BankServer.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Address",
+                name: "Addresses",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    UpdateCounter = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Address", x => x.Id);
+                    table.PrimaryKey("PK_Addresses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -43,7 +44,8 @@ namespace BankServer.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    UpdateCounter = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -51,16 +53,17 @@ namespace BankServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PhoneNumber",
+                name: "PhoneNumbers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Phone = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    Phone = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    UpdateCounter = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PhoneNumber", x => x.Id);
+                    table.PrimaryKey("PK_PhoneNumbers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -69,7 +72,8 @@ namespace BankServer.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Type = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    Type = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    UpdateCounter = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -85,15 +89,16 @@ namespace BankServer.Migrations
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     AddressId = table.Column<int>(type: "int", nullable: true),
                     Latitude = table.Column<double>(type: "float", nullable: false),
-                    Longitude = table.Column<double>(type: "float", nullable: false)
+                    Longitude = table.Column<double>(type: "float", nullable: false),
+                    UpdateCounter = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Locations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Locations_Address_AddressId",
+                        name: "FK_Locations_Addresses_AddressId",
                         column: x => x.AddressId,
-                        principalTable: "Address",
+                        principalTable: "Addresses",
                         principalColumn: "Id");
                 });
 
@@ -145,14 +150,14 @@ namespace BankServer.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_Address_AddressId",
+                        name: "FK_AspNetUsers_Addresses_AddressId",
                         column: x => x.AddressId,
-                        principalTable: "Address",
+                        principalTable: "Addresses",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_PhoneNumber_PhoneNumberId",
+                        name: "FK_AspNetUsers_PhoneNumbers_PhoneNumberId",
                         column: x => x.PhoneNumberId,
-                        principalTable: "PhoneNumber",
+                        principalTable: "PhoneNumbers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -165,33 +170,35 @@ namespace BankServer.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    PhoneNumberId = table.Column<int>(type: "int", nullable: false)
+                    PhoneNumberId = table.Column<int>(type: "int", nullable: false),
+                    UpdateCounter = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Banks", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Banks_PhoneNumber_PhoneNumberId",
+                        name: "FK_Banks_PhoneNumbers_PhoneNumberId",
                         column: x => x.PhoneNumberId,
-                        principalTable: "PhoneNumber",
+                        principalTable: "PhoneNumbers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Account",
+                name: "Accounts",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AccountNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    PersonId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    PersonId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UpdateCounter = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Account", x => x.Id);
+                    table.PrimaryKey("PK_Accounts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Account_AspNetUsers_PersonId",
+                        name: "FK_Accounts_AspNetUsers_PersonId",
                         column: x => x.PersonId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -291,45 +298,50 @@ namespace BankServer.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Amount = table.Column<double>(type: "float", nullable: false),
-                    TypeID = table.Column<int>(type: "int", nullable: true),
-                    BankID = table.Column<int>(type: "int", nullable: true),
-                    LocationId = table.Column<int>(type: "int", nullable: true),
-                    AccountId = table.Column<int>(type: "int", nullable: true),
-                    CategoryID = table.Column<int>(type: "int", nullable: true)
+                    TypeID = table.Column<int>(type: "int", nullable: false),
+                    BankID = table.Column<int>(type: "int", nullable: false),
+                    LocationId = table.Column<int>(type: "int", nullable: false),
+                    AccountId = table.Column<int>(type: "int", nullable: false),
+                    CategoryID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Transactions", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Transactions_Account_AccountId",
+                        name: "FK_Transactions_Accounts_AccountId",
                         column: x => x.AccountId,
-                        principalTable: "Account",
-                        principalColumn: "Id");
+                        principalTable: "Accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Transactions_Banks_BankID",
                         column: x => x.BankID,
                         principalTable: "Banks",
-                        principalColumn: "ID");
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Transactions_Categories_CategoryID",
                         column: x => x.CategoryID,
                         principalTable: "Categories",
-                        principalColumn: "ID");
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Transactions_Locations_LocationId",
                         column: x => x.LocationId,
                         principalTable: "Locations",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Transactions_TransactionsTypes_TypeID",
                         column: x => x.TypeID,
                         principalTable: "TransactionsTypes",
-                        principalColumn: "ID");
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Account_PersonId",
-                table: "Account",
+                name: "IX_Accounts_PersonId",
+                table: "Accounts",
                 column: "PersonId");
 
             migrationBuilder.CreateIndex(
@@ -441,7 +453,7 @@ namespace BankServer.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Account");
+                name: "Accounts");
 
             migrationBuilder.DropTable(
                 name: "Banks");
@@ -459,10 +471,10 @@ namespace BankServer.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Address");
+                name: "Addresses");
 
             migrationBuilder.DropTable(
-                name: "PhoneNumber");
+                name: "PhoneNumbers");
         }
     }
 }

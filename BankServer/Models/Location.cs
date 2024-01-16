@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BankServer.Models.Base;
+using System.ComponentModel.DataAnnotations;
 
 namespace BankServer.Models
 {
-    public class Location
+    public class Location : BaseModel
     {
         public int Id { get; set; }
 

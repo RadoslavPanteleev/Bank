@@ -39,11 +39,14 @@ namespace BankServer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("UpdateCounter")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PersonId");
 
-                    b.ToTable("Account");
+                    b.ToTable("Accounts");
                 });
 
             modelBuilder.Entity("BankServer.Models.Address", b =>
@@ -59,9 +62,12 @@ namespace BankServer.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<int>("UpdateCounter")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Address");
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("BankServer.Models.Bank", b =>
@@ -83,6 +89,9 @@ namespace BankServer.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("PhoneNumberId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UpdateCounter")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
@@ -110,6 +119,9 @@ namespace BankServer.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int>("UpdateCounter")
+                        .HasColumnType("int");
+
                     b.HasKey("ID");
 
                     b.ToTable("Categories");
@@ -136,6 +148,9 @@ namespace BankServer.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("UpdateCounter")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -239,9 +254,12 @@ namespace BankServer.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int>("UpdateCounter")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.ToTable("PhoneNumber");
+                    b.ToTable("PhoneNumbers");
                 });
 
             modelBuilder.Entity("BankServer.Models.Transaction", b =>
@@ -252,25 +270,25 @@ namespace BankServer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
 
-                    b.Property<int?>("AccountId")
+                    b.Property<int>("AccountId")
                         .HasColumnType("int");
 
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
-                    b.Property<int?>("BankID")
+                    b.Property<int>("BankID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CategoryID")
+                    b.Property<int>("CategoryID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("LocationId")
+                    b.Property<int>("LocationId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TypeID")
+                    b.Property<int>("TypeID")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
@@ -300,6 +318,9 @@ namespace BankServer.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("UpdateCounter")
+                        .HasColumnType("int");
 
                     b.HasKey("ID");
 
@@ -491,23 +512,33 @@ namespace BankServer.Migrations
                 {
                     b.HasOne("BankServer.Models.Account", "Account")
                         .WithMany()
-                        .HasForeignKey("AccountId");
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BankServer.Models.Bank", "Bank")
                         .WithMany()
-                        .HasForeignKey("BankID");
+                        .HasForeignKey("BankID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("BankServer.Models.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryID");
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BankServer.Models.Location", "Location")
                         .WithMany()
-                        .HasForeignKey("LocationId");
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BankServer.Models.TransactionType", "Type")
                         .WithMany()
-                        .HasForeignKey("TypeID");
+                        .HasForeignKey("TypeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Account");
 
