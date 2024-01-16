@@ -1,4 +1,5 @@
 using BankServer;
+using BankServer.Services;
 using Microsoft.AspNetCore.Authentication.Negotiate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +24,8 @@ builder.Services.AddAuthorization(options =>
 
 var connection = builder.Configuration.GetConnectionString("WebApiDatabase");
 builder.Services.AddDbContextPool<BankContext>(options => options.UseSqlServer(connection));
+
+builder.Services.AddScoped<UsersService>();
 
 var app = builder.Build();
 

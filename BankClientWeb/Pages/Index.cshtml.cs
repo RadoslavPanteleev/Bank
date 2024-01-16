@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Net;
 
 namespace BankClientWeb.Pages
 {
@@ -12,9 +13,16 @@ namespace BankClientWeb.Pages
             _logger = logger;
         }
 
-        public void OnGet()
-        {
 
+        public IActionResult OnGet()
+        {
+            string? cookie = Request.Cookies["Token"];
+            if (string.IsNullOrEmpty(cookie))
+            {
+                return Redirect("/Login");
+            }
+
+            return new OkResult();
         }
     }
 }
