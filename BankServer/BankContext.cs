@@ -20,14 +20,14 @@ namespace BankServer
         }
 
         // Entities
-        public DbSet<Account> Accounts { get; set; }
-        public DbSet<Address> Addresses { get; set; }
-        public DbSet<Bank> Banks { get; set; }
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Location> Locations { get; set; }
-        public DbSet<Person> Peoples { get; set; }
-        public DbSet<PhoneNumber> PhoneNumbers { get; set; }
-        public DbSet<Transaction> Transactions { get; set; }
-        public DbSet<TransactionType> TransactionsTypes { get; set; }
+        public DbSet<Account> Accounts { get; set; } = null!;
+        public DbSet<Address> Addresses { get; set; } = null!;
+        public DbSet<Bank> Banks { get; set; } = null!;
+        public DbSet<Category> Categories { get; set; } = null!;
+        public DbSet<Location> Locations { get; set; } = null!;
+        public DbSet<Person> Peoples { get; set; } = null!;
+        public DbSet<PhoneNumber> PhoneNumbers { get; set; } = null!;
+        public DbSet<Transaction> Transactions { get; set; } = null!;
+        public DbSet<TransactionType> TransactionsTypes { get; set; } = null!;
     }
 }

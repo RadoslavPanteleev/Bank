@@ -32,7 +32,15 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 using (var context = scope.ServiceProvider.GetService<BankContext>())
-    context?.Database.EnsureCreated();
+    try
+    {
+        context?.Database.EnsureCreated();
+    }
+    catch(Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+        return;
+    }
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
