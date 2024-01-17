@@ -1,33 +1,19 @@
 ﻿using BankServer.Controllers.Base;
 using BankServer.Models;
+using BankServer.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BankServer.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TransactionTypesController : BankControllerBase<TransactionType, TransactionType>
+    public class TransactionTypesController : BankControllerBase<TransactionType, TransactionType, TransactionTypesService>
     {
-        private readonly BankContext bankContext;
+        private readonly TransactionTypesService transactionTypesService;
 
-        public TransactionTypesController(BankContext bankContext) : base(bankContext.TransactionsTypes, bankContext)
+        public TransactionTypesController(TransactionTypesService transactionTypesService) : base(transactionTypesService)
         {
-            this.bankContext = bankContext;
-        }
-
-        protected override int GetID(TransactionType record)
-        {
-            return record.ID;
-        }
-
-        protected override Task<TransactionType> GetRecord(TransactionType source)
-        {
-            return Task.FromResult(source);
-        }
-
-        protected override void UpdateRecord(TransactionType destination, TransactionType source)
-        {
-            destination.Type = source.Type;
+            this.transactionTypesService = transactionTypesService;
         }
     }
 }

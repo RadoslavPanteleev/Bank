@@ -1,33 +1,19 @@
 ﻿using BankServer.Controllers.Base;
 using BankServer.Models;
+using BankServer.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BankServer.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class PhoneNumbersController : BankControllerBase<PhoneNumber, PhoneNumber>
+    public class PhoneNumbersController : BankControllerBase<PhoneNumber, PhoneNumber, PhoneNumbersService>
     {
-        private readonly BankContext bankContext;
+        private readonly PhoneNumbersService phoneNumbersService;
 
-        public PhoneNumbersController(BankContext _bankContext) : base(_bankContext.PhoneNumbers, _bankContext)
+        public PhoneNumbersController(PhoneNumbersService phoneNumbersService) : base(phoneNumbersService)
         {
-            bankContext = _bankContext;
-
-        }
-        protected override int GetID(PhoneNumber record)
-        {
-            return record.Id;
-        }
-
-        protected override Task<PhoneNumber> GetRecord(PhoneNumber source)
-        {
-            return Task.FromResult(source);
-        }
-
-        protected override void UpdateRecord(PhoneNumber destination, PhoneNumber source)
-        {
-            destination.Phone = source.Phone;
+            this.phoneNumbersService = phoneNumbersService;
         }
     }
 }

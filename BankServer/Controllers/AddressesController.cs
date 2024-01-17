@@ -1,33 +1,19 @@
 ﻿using BankServer.Controllers.Base;
 using BankServer.Models;
+using BankServer.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BankServer.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AddressesController : BankControllerBase<Address, Address>
+    public class AddressesController : BankControllerBase<Address, Address, AddressesService>
     {
-        private readonly BankContext bankContext;
+        private readonly AddressesService addressesService;
 
-        public AddressesController(BankContext bankContext) : base(bankContext.Addresses, bankContext)
+        public AddressesController(AddressesService addressesService) : base(addressesService)
         {
-            this.bankContext = bankContext;
-        }
-
-        protected override int GetID(Address record)
-        {
-            return record.Id;
-        }
-
-        protected override Task<Address> GetRecord(Address source)
-        {
-            return Task.FromResult(source);
-        }
-
-        protected override void UpdateRecord(Address destination, Address source)
-        {
-            destination.Description = source.Description;
+            this.addressesService = addressesService;
         }
     }
 }

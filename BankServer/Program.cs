@@ -26,6 +26,14 @@ builder.Services.AddAuthorization(options =>
 var connection = builder.Configuration.GetConnectionString("WebApiDatabase");
 builder.Services.AddDbContextPool<BankContext>(options => options.UseSqlServer(connection));
 
+builder.Services.AddTransient<AccountsService>();
+builder.Services.AddTransient<AddressesService>();
+builder.Services.AddTransient<BanksService>();
+builder.Services.AddTransient<CategoriesService>();
+builder.Services.AddTransient<LocationsService>();
+builder.Services.AddTransient<PhoneNumbersService>();
+builder.Services.AddTransient<TransactionTypesService>();
+
 builder.Services.AddScoped<UsersService>();
 
 var app = builder.Build();
