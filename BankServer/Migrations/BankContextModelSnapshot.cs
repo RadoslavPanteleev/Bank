@@ -24,13 +24,10 @@ namespace BankServer.Migrations
 
             modelBuilder.Entity("BankServer.Models.Account", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
                     b.Property<string>("AccountNumber")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AccountName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -42,7 +39,7 @@ namespace BankServer.Migrations
                     b.Property<int>("UpdateCounter")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("AccountNumber");
 
                     b.HasIndex("PersonId");
 
@@ -270,8 +267,9 @@ namespace BankServer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
 
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
+                    b.Property<string>("AccountNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("Amount")
                         .HasColumnType("float");
@@ -293,7 +291,7 @@ namespace BankServer.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("AccountId");
+                    b.HasIndex("AccountNumber");
 
                     b.HasIndex("BankID");
 
@@ -512,7 +510,7 @@ namespace BankServer.Migrations
                 {
                     b.HasOne("BankServer.Models.Account", "Account")
                         .WithMany()
-                        .HasForeignKey("AccountId")
+                        .HasForeignKey("AccountNumber")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -1,7 +1,10 @@
 ﻿using BankServer.Controllers.Base;
 using BankServer.Models;
 using BankServer.Services;
+using JWTAuthentication.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace BankServer.Controllers
 {
@@ -14,6 +17,24 @@ namespace BankServer.Controllers
         public CategoriesController(CategoriesService categoriesService) : base(categoriesService)
         {
             this.categoriesService = categoriesService;
+        }
+
+        [Authorize(Roles = UserRoles.Admin)]
+        public override Task<ActionResult> CreateAsync([FromBody] Category inputModel)
+        {
+            return base.CreateAsync(inputModel);
+        }
+
+        [Authorize(Roles = UserRoles.Admin)]
+        public override Task<ActionResult> Update([SwaggerParameter(null, Required = true)] Category inputModel, [SwaggerParameter("specific id", Required = true)] int id)
+        {
+            return base.Update(inputModel, id);
+        }
+
+        [Authorize(Roles = UserRoles.Admin)]
+        public override Task<ActionResult> Delete([SwaggerParameter("specific id", Required = true)] int id)
+        {
+            return base.Delete(id);
         }
     }
 }

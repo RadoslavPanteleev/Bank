@@ -188,15 +188,14 @@ namespace BankServer.Migrations
                 name: "Accounts",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AccountNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    AccountNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AccountName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     PersonId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     UpdateCounter = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Accounts", x => x.Id);
+                    table.PrimaryKey("PK_Accounts", x => x.AccountNumber);
                     table.ForeignKey(
                         name: "FK_Accounts_AspNetUsers_PersonId",
                         column: x => x.PersonId,
@@ -301,17 +300,17 @@ namespace BankServer.Migrations
                     TypeID = table.Column<int>(type: "int", nullable: false),
                     BankID = table.Column<int>(type: "int", nullable: false),
                     LocationId = table.Column<int>(type: "int", nullable: false),
-                    AccountId = table.Column<int>(type: "int", nullable: false),
+                    AccountNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CategoryID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Transactions", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Transactions_Accounts_AccountId",
-                        column: x => x.AccountId,
+                        name: "FK_Transactions_Accounts_AccountNumber",
+                        column: x => x.AccountNumber,
                         principalTable: "Accounts",
-                        principalColumn: "Id",
+                        principalColumn: "AccountNumber",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Transactions_Banks_BankID",
@@ -404,9 +403,9 @@ namespace BankServer.Migrations
                 column: "AddressId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transactions_AccountId",
+                name: "IX_Transactions_AccountNumber",
                 table: "Transactions",
-                column: "AccountId");
+                column: "AccountNumber");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transactions_BankID",

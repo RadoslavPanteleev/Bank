@@ -123,6 +123,10 @@ namespace BankServer.Controllers
             if (userExists != null)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
 
+            var admins = await userManager.GetUsersInRoleAsync(UserRoles.Admin);
+            if(admins.Count > 1)
+                return StatusCode(StatusCodes.Status403Forbidden, new Response { Status = "Error", Message = "There is already registered admin!" });
+
             var phoneNumber = await this.phoneNumberService.GetPhoneNumber(model.Phone);
             if (phoneNumber is null)
             {
