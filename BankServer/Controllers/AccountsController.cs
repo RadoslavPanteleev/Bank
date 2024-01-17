@@ -17,7 +17,7 @@ namespace BankServer.Controllers
             this.bankContext = bankContext;
         }
 
-        protected override async Task<Account> GetRecord(int id)
+        protected override async Task<Account?> GetRecord(int id)
         {
             return await bankContext.Accounts.Include(x => x.Person).SingleOrDefaultAsync(x => x.Id == id);
         }

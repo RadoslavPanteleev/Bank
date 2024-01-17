@@ -21,7 +21,7 @@ namespace BankServer.Controllers.Base
 
         protected abstract int GetID(TEntity record);
         protected abstract Task<TEntity> GetRecord(TInputModel inputModel);
-        protected virtual async Task<TEntity> GetRecord(int id)
+        protected virtual async Task<TEntity?> GetRecord(int id)
         {
             return await Entities.FindAsync(id);
         }

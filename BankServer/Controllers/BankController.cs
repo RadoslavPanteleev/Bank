@@ -19,7 +19,7 @@ public class BankController : BankControllerBase<Bank, BankInputModel>
         bankContext = _bankContext;
     }
 
-    protected override async Task<Bank> GetRecord(int id)
+    protected override async Task<Bank?> GetRecord(int id)
     {
         return await bankContext.Banks.Include(x => x.PhoneNumber).SingleOrDefaultAsync(x => x.ID == id);
     }
