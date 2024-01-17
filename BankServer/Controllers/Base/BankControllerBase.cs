@@ -75,28 +75,35 @@ namespace BankServer.Controllers.Base
         [HttpPut("{id}")]
         public virtual async Task<ActionResult> Update([SwaggerParameter(Required = true)] TInputModel inputModel, [SwaggerParameter("specific id", Required = true)] int id)
         {
-            var record = await GetRecord(id);
-            if (record is null)
-                return NotFound();
-
-            try
+            using (var dbContextTransaction = await dbContext.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable))
             {
-                var updatedRecord = await GetRecord(inputModel);
+                var record = await GetRecord(id);
+                if (record is null)
+                    return NotFound();
 
-                if (record.UpdateCounter != updatedRecord.UpdateCounter)
-                    return StatusCode(StatusCodes.Status304NotModified);
+                try
+                {
+                    var updatedRecord = await GetRecord(inputModel);
 
-                UpdateRecord(record, updatedRecord);
+                    if (record.UpdateCounter != updatedRecord.UpdateCounter)
+                        return StatusCode(StatusCodes.Status304NotModified);
+
+                    UpdateRecord(record, updatedRecord);
+                }
+                catch (KeyNotFoundException ex)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = ex.Message });
+                }
+
+                record.UpdateCounter++;
+
+                await dbContext.SaveChangesAsync();
+                await dbContextTransaction.CommitAsync();
+
+                return CreatedAtAction(nameof(Get), new { id = GetID(record) }, record);
             }
-            catch(KeyNotFoundException ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = ex.Message });
-            }
 
-            record.UpdateCounter++;
-
-            await dbContext.SaveChangesAsync();
-            return CreatedAtAction(nameof(Get), new { id = GetID(record) }, record);
+            
         }
 
         [SwaggerOperation(Summary = "Delete record by specific id")]
