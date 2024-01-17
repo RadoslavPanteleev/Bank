@@ -92,6 +92,7 @@ namespace BankServer.Controllers.Base
                 }
                 catch (KeyNotFoundException ex)
                 {
+                    await dbContextTransaction.RollbackAsync();
                     return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = ex.Message });
                 }
 
@@ -102,8 +103,6 @@ namespace BankServer.Controllers.Base
 
                 return CreatedAtAction(nameof(Get), new { id = GetID(record) }, record);
             }
-
-            
         }
 
         [SwaggerOperation(Summary = "Delete record by specific id")]
