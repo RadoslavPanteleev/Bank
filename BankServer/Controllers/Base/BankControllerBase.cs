@@ -40,7 +40,7 @@ namespace BankServer.Controllers.Base
         [SwaggerResponse(StatusCodes.Status201Created, Description = "if created")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "if error occured")]
         [HttpPost]
-        public virtual async Task<ActionResult> CreateAsync(TInputModel inputModel)
+        public virtual async Task<ActionResult> CreateAsync([FromBody] TInputModel inputModel)
         {
             try
             {

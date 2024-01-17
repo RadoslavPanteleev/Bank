@@ -1,4 +1,5 @@
 ﻿using BankServer.Models;
+using BankServer.Services;
 using JWTAuthentication.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,12 +14,24 @@ namespace BankServer.Controllers
     [ApiController]
     public class AuthenticateController : ControllerBase
     {
+        private readonly BankContext bankContext;
+        private readonly PhoneNumbersService phoneNumberService;
+        private readonly AddressesService addressesService;
         private readonly UserManager<Person> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IConfiguration _configuration;
 
-        public AuthenticateController(UserManager<Person> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public AuthenticateController(
+            BankContext bankContext, 
+            PhoneNumbersService phoneNumberService, 
+            AddressesService addressesService, 
+            UserManager<Person> userManager, 
+            RoleManager<IdentityRole> roleManager, 
+            IConfiguration configuration)
         {
+            this.bankContext = bankContext;
+            this.phoneNumberService = phoneNumberService;
+            this.addressesService = addressesService;
             this.userManager = userManager;
             this.roleManager = roleManager;
             _configuration = configuration;
@@ -71,12 +84,30 @@ namespace BankServer.Controllers
             if (userExists != null)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
 
+            var phoneNumber = await this.phoneNumberService.GetPhoneNumber(model.Phone);
+            if(phoneNumber is null)
+            {
+                phoneNumber = await this.phoneNumberService.CreateAsync(new PhoneNumber { Phone = model.Phone });
+                if(phoneNumber is null)
+                    return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+            }
+
+            var address = await this.addressesService.Get(model.AddressId);
+            if(model.AddressId > 0 && address is null)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, new Response { Status = "Error", Message = $"Address id {model.AddressId} not found!" });
+            }
+
             Person user = new Person()
             {
+                UserName = model.Username,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username
+                PhoneNumber = phoneNumber,
             };
+
             var result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
@@ -92,12 +123,30 @@ namespace BankServer.Controllers
             if (userExists != null)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
 
+            var phoneNumber = await this.phoneNumberService.GetPhoneNumber(model.Phone);
+            if (phoneNumber is null)
+            {
+                phoneNumber = await this.phoneNumberService.CreateAsync(new PhoneNumber { Phone = model.Phone });
+                if (phoneNumber is null)
+                    return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+            }
+
+            var address = await this.addressesService.Get(model.AddressId);
+            if (model.AddressId > 0 && address is null)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, new Response { Status = "Error", Message = $"Address id {model.AddressId} not found!" });
+            }
+
             Person user = new Person()
             {
+                UserName = model.Username,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username
+                PhoneNumber = phoneNumber,
             };
+
             var result = await userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });

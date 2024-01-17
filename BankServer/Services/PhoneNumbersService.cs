@@ -1,5 +1,6 @@
 ﻿using BankServer.Models;
 using BankServer.Services.Base;
+using Microsoft.EntityFrameworkCore;
 
 namespace BankServer.Services
 {
@@ -25,6 +26,14 @@ namespace BankServer.Services
         protected override void UpdateRecord(PhoneNumber destination, PhoneNumber source)
         {
             destination.Phone = source.Phone;
+        }
+
+        public async Task<PhoneNumber?> GetPhoneNumber(string? number) 
+        {
+            if (string.IsNullOrEmpty(number))
+                return null;
+
+            return await bankContext.PhoneNumbers.FirstOrDefaultAsync(x => x.Phone == number);
         }
     }
 }
