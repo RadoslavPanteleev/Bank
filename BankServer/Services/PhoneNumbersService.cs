@@ -8,7 +8,7 @@ namespace BankServer.Services
     {
         private readonly BankContext bankContext;
 
-        public PhoneNumbersService(BankContext _bankContext) : base(_bankContext.PhoneNumbers, _bankContext)
+        public PhoneNumbersService(BankContext _bankContext, ILogger<PhoneNumber> logger) : base(_bankContext.PhoneNumbers, _bankContext, logger)
         {
             bankContext = _bankContext;
         }

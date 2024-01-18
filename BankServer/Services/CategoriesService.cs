@@ -6,7 +6,7 @@ namespace BankServer.Services
     public class CategoriesService : BaseService<Category, Category>
     {
         private readonly BankContext bankContext;
-        public CategoriesService(BankContext bankContext) : base(bankContext.Categories, bankContext)
+        public CategoriesService(BankContext bankContext, ILogger<Category> logger) : base(bankContext.Categories, bankContext, logger)
         {
             this.bankContext = bankContext;
         }

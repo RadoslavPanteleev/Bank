@@ -1,11 +1,13 @@
-﻿using BankServer.Models.Base;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BankServer.Models
 {
-    public class Category : BaseModel
+    public class Category
     {
         public int ID { get; set; }
+
+        [ConcurrencyCheck]
+        public string ConcurrencyStamp { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
         [StringLength(100)]

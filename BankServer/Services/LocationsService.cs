@@ -9,7 +9,7 @@ namespace BankServer.Services
     {
         private readonly BankContext bankContext;
 
-        public LocationsService(BankContext bankContext) : base(bankContext.Locations, bankContext)
+        public LocationsService(BankContext bankContext, ILogger<Location> logger) : base(bankContext.Locations, bankContext, logger)
         {
             this.bankContext = bankContext;
         }
@@ -33,7 +33,6 @@ namespace BankServer.Services
         {
             var location = new Location
             {
-                UpdateCounter = source.UpdateCounter,
                 Name = source.Name,
                 Address = await bankContext.Addresses.FindAsync(source.AddressId),
                 Longitude = source.Longitude,
@@ -48,6 +47,7 @@ namespace BankServer.Services
 
         protected override void UpdateRecord(Location destination, Location source)
         {
+            destination.ConcurrencyStamp = source.ConcurrencyStamp;
             destination.Address = source.Address;
             destination.Latitude = source.Latitude;
             destination.Longitude = source.Longitude;

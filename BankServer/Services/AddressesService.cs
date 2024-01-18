@@ -6,7 +6,7 @@ namespace BankServer.Services
     public class AddressesService : BaseService<Address, Address>
     {
         private readonly BankContext bankContext;
-        public AddressesService(BankContext bankContext) : base(bankContext.Addresses, bankContext)
+        public AddressesService(BankContext bankContext, ILogger<Address> logger) : base(bankContext.Addresses, bankContext, logger)
         {
             this.bankContext = bankContext;
         }

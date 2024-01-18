@@ -16,6 +16,6 @@ namespace BankServer.Models
         [Required]
         public new PhoneNumber? PhoneNumber { get; set; }
 
-        public Address? Address { get; set; }
+        public int AddressId { get; set; }
     }
 }

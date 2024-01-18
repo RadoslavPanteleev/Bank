@@ -1,105 +1,86 @@
 ﻿using BankServer.Controllers.Models;
 using BankServer.Models;
-using BankServer.Services.Base;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
+using System.Data;
 
 namespace BankServer.Services
 {
     public class AccountsService
     {
         private readonly BankContext bankContext;
+        private readonly ILogger logger;
 
-        public AccountsService(BankContext bankContext)
+
+        public AccountsService(BankContext bankContext, ILogger<AccountsService> logger)
         {
             this.bankContext = bankContext;
+            this.logger = logger;
         }
 
         public async Task<IList<Account>> GetAll(string personId)
         {
-            return await bankContext.Accounts.Include(x => x.Person).Where(x => x.Person!.Id.Equals(personId)).ToListAsync();
+            return await bankContext.Accounts.Where(x => x.PersonId == personId).ToListAsync();
         }
 
-
-        public async Task<Account?> GetRecord(string accountNumber, string personId)
+        public async Task<Account?> GetRecord(Guid accountNumber, string personId)
         {
-            return await bankContext.Accounts.Include(x => x.Person).Where(x => x.Person!.Id.Equals(personId)).SingleOrDefaultAsync(x => x.AccountNumber == accountNumber);
+            return await bankContext.Accounts.Where(x => x.PersonId == personId).SingleOrDefaultAsync(x => x.AccountNumber.Equals(accountNumber));
         }
 
         public async Task<Account?> CreateAccount(AccountInputModel inputModel, string personId)
         {
-            var strategy = bankContext.Database.CreateExecutionStrategy();
-            return await strategy.ExecuteAsync(async () =>
+            var account = new Account
             {
-                using (var dbContextTransaction = await bankContext.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable))
-                {
-                    var person = await bankContext.Peoples.SingleOrDefaultAsync(x => x.Id == personId);
-                    if (person is null)
-                        return null;
+                AccountNumber = Guid.NewGuid(),
+                AccountName = inputModel.AccountName,
+                PersonId = personId
+            };
 
-                    var account = new Account
-                    {
-                        UpdateCounter = 0,
-                        AccountNumber = Guid.NewGuid().ToString(),
-                        AccountName = inputModel.AccountName,
-                        Person = person
-                    };
+            await bankContext.Accounts.AddAsync(account);
+            await bankContext.SaveChangesAsync();
 
-                    await bankContext.Accounts.AddAsync(account);
-                    await bankContext.SaveChangesAsync();
-
-                    await dbContextTransaction.CommitAsync();
-
-                    return account;
-                }
-            });
+            return account;
         }
 
-        public async Task<Account> UpdateAccount(AccountInputModel inputModel, string personId)
+        public async Task<Account?> UpdateAccount(AccountInputModel inputModel, string personId)
         {
             var strategy = bankContext.Database.CreateExecutionStrategy();
             return await strategy.ExecuteAsync(async () =>
             {
-                using (var dbContextTransaction = await bankContext.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable))
-                {
-                    var person = await bankContext.Peoples.SingleOrDefaultAsync(x => x.Id == personId);
-                    if (person is null)
-                        throw new NullReferenceException(personId);
+                var account = await bankContext.Accounts.SingleOrDefaultAsync(x => x.AccountNumber == inputModel.AccountNumber);
+                if (account is null)
+                    throw new NullReferenceException("AccountInputModel");
 
-                    var account = await bankContext.Accounts.SingleOrDefaultAsync(x => x.AccountNumber == inputModel.AccountNumber);
-                    if (account is null)
-                        throw new NullReferenceException("AccountInputModel");
+                account.AccountName = inputModel.AccountName;
 
-                    if (account.UpdateCounter != inputModel.UpdateCounter)
-                        throw new DbUpdateConcurrencyException();
-
-                    account.AccountName = inputModel.AccountName;
-                    account.UpdateCounter++;
-
-                    await bankContext.SaveChangesAsync();
-                    await dbContextTransaction.CommitAsync();
-
-                    return account;
-                }
+                await bankContext.SaveChangesAsync();
+                return account;
             });
         }
 
-        public async Task DeleteAccount(string accountNumber)
+        public async Task DeleteAccount(Guid accountNumber)
         {
             var strategy = bankContext.Database.CreateExecutionStrategy();
             await strategy.ExecuteAsync(async () =>
             {
-                using (var dbContextTransaction = await bankContext.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable))
+                using (var dbContextTransaction = await bankContext.Database.BeginTransactionAsync(IsolationLevel.Serializable))
                 {
-                    var account = await bankContext.Accounts.SingleOrDefaultAsync(x => x.AccountNumber == accountNumber);
-                    if (account is null)
-                        throw new NullReferenceException(accountNumber);
+                    try
+                    {
+                        var account = await bankContext.Accounts.SingleOrDefaultAsync(x => x.AccountNumber == accountNumber);
+                        if (account is null)
+                            throw new NullReferenceException(accountNumber.ToString());
 
-                    bankContext.Accounts.Remove(account);
-                    await bankContext.SaveChangesAsync();
+                        bankContext.Accounts.Remove(account);
+                        await bankContext.SaveChangesAsync();
 
-                    await dbContextTransaction.CommitAsync();
+                        await dbContextTransaction.CommitAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        await dbContextTransaction.RollbackAsync();
+                        this.logger.LogError(ex.Message);
+                    }
                 }
             });
         }

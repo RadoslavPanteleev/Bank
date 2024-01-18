@@ -1,11 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BankServer.Models
 {
     public class Transaction
     {
         public int ID { get; set; }
+
+        [ConcurrencyCheck]
+        public string ConcurrencyStamp { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
         public DateTime Date { get; set; }

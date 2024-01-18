@@ -1,5 +1,4 @@
-﻿using BankServer.Models.Base;
-using Swashbuckle.AspNetCore.Annotations;
+﻿using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 
 namespace BankServer.Models
@@ -7,10 +6,13 @@ namespace BankServer.Models
     /// <summary>
     /// TransactionType
     /// </summary>
-    public class TransactionType : BaseModel
+    public class TransactionType
     {
         [SwaggerSchema(Description = "Field for internal use only", Nullable = true)]
         public int ID { get; set; }
+
+        [ConcurrencyCheck]
+        public string ConcurrencyStamp { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
         [StringLength(100)]

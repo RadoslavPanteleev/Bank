@@ -8,7 +8,7 @@ namespace BankServer.Services
     public class BanksService : BaseService<Bank, BankInputModel>
     {
         private readonly BankContext bankContext;
-        public BanksService(BankContext bankContext) : base(bankContext.Banks, bankContext)
+        public BanksService(BankContext bankContext, ILogger<Bank> logger) : base(bankContext.Banks, bankContext, logger)
         {
             this.bankContext = bankContext;
         }
@@ -32,7 +32,6 @@ namespace BankServer.Services
         {
             var bank = new Bank
             {
-                UpdateCounter = source.UpdateCounter,
                 Name = source.Name,
                 Address = source.Address,
                 PhoneNumber = await bankContext.PhoneNumbers.FindAsync(source.PhoneNumberId)
@@ -46,7 +45,7 @@ namespace BankServer.Services
 
         protected override void UpdateRecord(Bank destination, Bank source)
         {
-            destination.UpdateCounter = source.UpdateCounter;
+            destination.ConcurrencyStamp = source.ConcurrencyStamp;
             destination.Address = source.Address;
             destination.PhoneNumber = source.PhoneNumber;
             destination.Name = source.Name;

@@ -94,6 +94,7 @@ using (var context = scope.ServiceProvider.GetService<BankContext>())
     try
     {
         context?.Database.EnsureCreated();
+        //context?.Database.MigrateAsync();
     }
     catch(Exception ex)
     {

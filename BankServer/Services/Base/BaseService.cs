@@ -1,19 +1,20 @@
-﻿using BankServer.Models.Base;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace BankServer.Services.Base
 {
     public abstract class BaseService<TEntity, TInputModel>
-        where TEntity : BaseModel
+        where TEntity : class
         where TInputModel : class
     {
         protected readonly DbSet<TEntity> entities;
         protected readonly DbContext dbContext;
+        private readonly ILogger logger;
 
-        public BaseService(DbSet<TEntity> entities, DbContext dbContext)
+        public BaseService(DbSet<TEntity> entities, DbContext dbContext, ILogger<TEntity> logger)
         {
             this.entities = entities;
             this.dbContext = dbContext;
+            this.logger = logger;
         }
 
         #region Virtuals
@@ -58,28 +59,30 @@ namespace BankServer.Services.Base
 
         public virtual async Task Update(TInputModel inputModel, int id)
         {
-            using (var dbContextTransaction = await dbContext.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable))
+            using var dbContextTransaction = await dbContext.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable);
+            try
             {
                 var record = await GetRecord(id);
                 if (record is null)
                     return;
 
                 var updatedRecord = await GetRecord(inputModel);
-                if (record.UpdateCounter != updatedRecord.UpdateCounter)
-                    throw new DbUpdateConcurrencyException();
-
                 UpdateRecord(record, updatedRecord);
-
-                record.UpdateCounter++;
 
                 await dbContext.SaveChangesAsync();
                 await dbContextTransaction.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                await dbContextTransaction.RollbackAsync();
+                this.logger.LogError(ex.Message);
             }
         }
 
         public async Task Delete(int id)
         {
-            using (var dbContextTransaction = await dbContext.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable))
+            using var dbContextTransaction = await dbContext.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable);
+            try
             {
                 var record = await GetRecord(id);
                 if (record is null)
@@ -89,6 +92,11 @@ namespace BankServer.Services.Base
 
                 await dbContext.SaveChangesAsync();
                 await dbContextTransaction.CommitAsync();
+            }
+            catch(Exception ex)
+            {
+                await dbContextTransaction.RollbackAsync();
+                this.logger.LogError(ex.Message);
             }
         }
 

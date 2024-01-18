@@ -1,5 +1,4 @@
-﻿using BankServer.Models.Base;
-using BankServer.Services.Base;
+﻿using BankServer.Services.Base;
 using JWTAuthentication.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -7,7 +6,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace BankServer.Controllers.Base
 {
     public class BankControllerBase<TEntity, TInputModel, TService> : ControllerBase
-        where TEntity : BaseModel
+        where TEntity : class
         where TInputModel : class
         where TService : BaseService<TEntity, TInputModel>
     {

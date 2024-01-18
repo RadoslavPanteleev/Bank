@@ -7,7 +7,7 @@ namespace BankServer.Services
     {
         private readonly BankContext bankContext;
 
-        public TransactionTypesService(BankContext bankContext) : base(bankContext.TransactionsTypes, bankContext)
+        public TransactionTypesService(BankContext bankContext, ILogger<TransactionType> logger) : base(bankContext.TransactionsTypes, bankContext, logger)
         {
             this.bankContext = bankContext;
         }
