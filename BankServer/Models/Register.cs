@@ -23,7 +23,5 @@ namespace BankServer.Models
         [Required(ErrorMessage = "Phone number is required")]
         [StringLength(100)]
         public string? Phone { get; set; }
-
-        public int AddressId { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BankServer.Controllers
 {
-    [Authorize(Roles = UserRoles.User)]
+    [Authorize(Roles = $"{UserRoles.User}, {UserRoles.Admin}")]
     [ApiController]
     [Route("api/[controller]")]
     public class AddressesController : BankControllerBase<Address, Address, AddressesService>

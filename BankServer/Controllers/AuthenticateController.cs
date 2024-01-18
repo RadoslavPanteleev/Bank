@@ -92,11 +92,11 @@ namespace BankServer.Controllers
                     return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
             }
 
-            var address = await this.addressesService.Get(model.AddressId);
-            if(model.AddressId > 0 && address is null)
-            {
-                return StatusCode(StatusCodes.Status404NotFound, new Response { Status = "Error", Message = $"Address id {model.AddressId} not found!" });
-            }
+            //var address = await this.addressesService.Get(model.AddressId);
+            //if(model.AddressId > 0 && address is null)
+            //{
+            //    return StatusCode(StatusCodes.Status404NotFound, new Response { Status = "Error", Message = $"Address id {model.AddressId} not found!" });
+            //}
 
             Person user = new Person()
             {
@@ -135,11 +135,11 @@ namespace BankServer.Controllers
                     return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
             }
 
-            var address = await this.addressesService.Get(model.AddressId);
-            if (model.AddressId > 0 && address is null)
-            {
-                return StatusCode(StatusCodes.Status404NotFound, new Response { Status = "Error", Message = $"Address id {model.AddressId} not found!" });
-            }
+            //var address = await this.addressesService.Get(model.AddressId);
+            //if (model.AddressId > 0 && address is null)
+            //{
+            //    return StatusCode(StatusCodes.Status404NotFound, new Response { Status = "Error", Message = $"Address id {model.AddressId} not found!" });
+            //}
 
             Person user = new Person()
             {
