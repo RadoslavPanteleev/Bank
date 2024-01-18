@@ -1,8 +1,7 @@
 ﻿using BankServer.Controllers.Base;
-using BankServer.Controllers.Models;
+using BankServer.Entities;
 using BankServer.Models;
 using BankServer.Services;
-using JWTAuthentication.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,5 +1,5 @@
-﻿using BankServer.Services.Base;
-using JWTAuthentication.Authentication;
+﻿using BankServer.Models;
+using BankServer.Services.Base;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 

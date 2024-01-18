@@ -1,20 +1,20 @@
-﻿using BankServer.Models;
+﻿using BankServer.Entities;
 using BankServer.Services.Base;
 
 namespace BankServer.Services
 {
     public class TransactionTypesService : BaseService<TransactionType, TransactionType>
     {
-        private readonly BankContext bankContext;
+        private readonly AppDbContext bankContext;
 
-        public TransactionTypesService(BankContext bankContext, ILogger<TransactionType> logger) : base(bankContext.TransactionsTypes, bankContext, logger)
+        public TransactionTypesService(AppDbContext bankContext, ILogger<TransactionType> logger) : base(bankContext.TransactionsTypes, bankContext, logger)
         {
             this.bankContext = bankContext;
         }
 
         public override int GetID(TransactionType record)
         {
-            return record.ID;
+            return record.Id;
         }
 
         protected override Task<TransactionType> GetRecord(TransactionType source)

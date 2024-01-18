@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BankServer.Models
+namespace BankServer.Entities
 {
     public class Account
     {
@@ -12,10 +12,11 @@ namespace BankServer.Models
         public string ConcurrencyStamp { get; set; } = Guid.NewGuid().ToString();
 
         [Required]
-        [MaxLength(50)]
+        [MaxLength(100)]
         public string? AccountName { get; set; }
 
         [Required]
         public string? PersonId { get; set; } 
+        public Person? Person { get; set; }
     }
 }

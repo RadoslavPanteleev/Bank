@@ -1,6 +1,6 @@
-﻿using BankServer.Models;
+﻿using BankServer.Entities;
+using BankServer.Models;
 using BankServer.Services;
-using JWTAuthentication.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -14,7 +14,7 @@ namespace BankServer.Controllers
     [ApiController]
     public class AuthenticateController : ControllerBase
     {
-        private readonly BankContext bankContext;
+        private readonly AppDbContext bankContext;
         private readonly PhoneNumbersService phoneNumberService;
         private readonly AddressesService addressesService;
         private readonly UserManager<Person> userManager;
@@ -22,7 +22,7 @@ namespace BankServer.Controllers
         private readonly IConfiguration _configuration;
 
         public AuthenticateController(
-            BankContext bankContext, 
+            AppDbContext bankContext, 
             PhoneNumbersService phoneNumberService, 
             AddressesService addressesService, 
             UserManager<Person> userManager, 

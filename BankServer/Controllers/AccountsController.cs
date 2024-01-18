@@ -1,7 +1,6 @@
-﻿using BankServer.Controllers.Models;
+﻿using BankServer.Entities;
 using BankServer.Models;
 using BankServer.Services;
-using JWTAuthentication.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -87,8 +86,8 @@ namespace BankServer.Controllers
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "You must be signed to use this resource!")]
         [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "You must be with admin role to use this resource!")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "if error occured")]
-        [HttpPut]
-        public virtual async Task<ActionResult<Account?>> UpdateAccount([FromBody] AccountInputModel inputModel)
+        [HttpPut("{accountNumber}")]
+        public virtual async Task<ActionResult<Account?>> UpdateAccount([SwaggerParameter("specific id", Required = true)] Guid accountNumber, [FromBody] AccountInputModel inputModel)
         {
             var person = await userManager.FindByNameAsync(User.FindFirstValue(ClaimTypes.Name));
             if (person is null)
@@ -96,7 +95,7 @@ namespace BankServer.Controllers
 
             try
             {
-                var account = await accountsService.UpdateAccount(inputModel, person.Id);
+                var account = await accountsService.UpdateAccount(inputModel, accountNumber);
                 return account;
             }
             catch(DbUpdateConcurrencyException)

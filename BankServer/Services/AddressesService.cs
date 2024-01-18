@@ -1,12 +1,12 @@
-﻿using BankServer.Models;
+﻿using BankServer.Entities;
 using BankServer.Services.Base;
 
 namespace BankServer.Services
 {
     public class AddressesService : BaseService<Address, Address>
     {
-        private readonly BankContext bankContext;
-        public AddressesService(BankContext bankContext, ILogger<Address> logger) : base(bankContext.Addresses, bankContext, logger)
+        private readonly AppDbContext bankContext;
+        public AddressesService(AppDbContext bankContext, ILogger<Address> logger) : base(bankContext.Addresses, bankContext, logger)
         {
             this.bankContext = bankContext;
         }

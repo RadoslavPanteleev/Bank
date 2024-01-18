@@ -4,6 +4,7 @@ using BankServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankServer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class BankContextModelSnapshot : ModelSnapshot
+    [Migration("20240118213713_BANK")]
+    partial class BANK
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,8 +32,8 @@ namespace BankServer.Migrations
 
                     b.Property<string>("AccountName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -40,11 +42,9 @@ namespace BankServer.Migrations
 
                     b.Property<string>("PersonId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AccountNumber");
-
-                    b.HasIndex("PersonId");
 
                     b.ToTable("Accounts");
                 });
@@ -476,17 +476,6 @@ namespace BankServer.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("BankServer.Entities.Account", b =>
-                {
-                    b.HasOne("BankServer.Entities.Person", "Person")
-                        .WithMany()
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Person");
                 });
 
             modelBuilder.Entity("BankServer.Entities.Bank", b =>

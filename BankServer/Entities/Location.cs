@@ -1,18 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BankServer.Entities.Base;
+using System.ComponentModel.DataAnnotations;
 
-namespace BankServer.Models
+namespace BankServer.Entities
 {
-    public class Location
+    public class Location : BaseEntity
     {
-        public int Id { get; set; }
-
-        [ConcurrencyCheck]
-        public string ConcurrencyStamp { get; set; } = Guid.NewGuid().ToString();
-
         [Required]
         [StringLength(100)]
         public string? Name { get; set; }
 
+        public int AddressId { get; set; }
         public Address? Address { get; set; }
 
         [Required]

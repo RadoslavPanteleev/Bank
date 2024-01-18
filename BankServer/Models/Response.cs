@@ -1,4 +1,4 @@
-﻿namespace JWTAuthentication.Authentication
+﻿namespace BankServer.Models
 {
     public class Response
     {

@@ -1,4 +1,4 @@
-﻿using BankServer.Controllers.Models;
+﻿using BankServer.Entities;
 using BankServer.Models;
 using BankServer.Services.Base;
 using Microsoft.EntityFrameworkCore;
@@ -7,15 +7,15 @@ namespace BankServer.Services
 {
     public class BanksService : BaseService<Bank, BankInputModel>
     {
-        private readonly BankContext bankContext;
-        public BanksService(BankContext bankContext, ILogger<Bank> logger) : base(bankContext.Banks, bankContext, logger)
+        private readonly AppDbContext bankContext;
+        public BanksService(AppDbContext bankContext, ILogger<Bank> logger) : base(bankContext.Banks, bankContext, logger)
         {
             this.bankContext = bankContext;
         }
 
         public override async Task<Bank?> GetRecord(int id)
         {
-            return await bankContext.Banks.Include(x => x.PhoneNumber).SingleOrDefaultAsync(x => x.ID == id);
+            return await bankContext.Banks.Include(x => x.PhoneNumber).SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public override async Task<IList<Bank>> GetAll()
@@ -25,7 +25,7 @@ namespace BankServer.Services
 
         public override int GetID(Bank record)
         {
-            return record.ID;
+            return record.Id;
         }
 
         protected override async Task<Bank> GetRecord(BankInputModel source)
@@ -45,7 +45,6 @@ namespace BankServer.Services
 
         protected override void UpdateRecord(Bank destination, Bank source)
         {
-            destination.ConcurrencyStamp = source.ConcurrencyStamp;
             destination.Address = source.Address;
             destination.PhoneNumber = source.PhoneNumber;
             destination.Name = source.Name;

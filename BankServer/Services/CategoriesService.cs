@@ -1,19 +1,19 @@
-﻿using BankServer.Models;
+﻿using BankServer.Entities;
 using BankServer.Services.Base;
 
 namespace BankServer.Services
 {
     public class CategoriesService : BaseService<Category, Category>
     {
-        private readonly BankContext bankContext;
-        public CategoriesService(BankContext bankContext, ILogger<Category> logger) : base(bankContext.Categories, bankContext, logger)
+        private readonly AppDbContext bankContext;
+        public CategoriesService(AppDbContext bankContext, ILogger<Category> logger) : base(bankContext.Categories, bankContext, logger)
         {
             this.bankContext = bankContext;
         }
 
         public override int GetID(Category record)
         {
-            return record.ID;
+            return record.Id;
         }
 
         protected override Task<Category> GetRecord(Category source)

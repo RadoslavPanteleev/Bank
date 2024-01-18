@@ -1,4 +1,4 @@
-﻿using BankServer.Models;
+﻿using BankServer.Entities;
 using BankServer.Services.Base;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,9 +6,9 @@ namespace BankServer.Services
 {
     public class PhoneNumbersService : BaseService<PhoneNumber, PhoneNumber>
     {
-        private readonly BankContext bankContext;
+        private readonly AppDbContext bankContext;
 
-        public PhoneNumbersService(BankContext _bankContext, ILogger<PhoneNumber> logger) : base(_bankContext.PhoneNumbers, _bankContext, logger)
+        public PhoneNumbersService(AppDbContext _bankContext, ILogger<PhoneNumber> logger) : base(_bankContext.PhoneNumbers, _bankContext, logger)
         {
             bankContext = _bankContext;
         }

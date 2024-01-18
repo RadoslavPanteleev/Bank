@@ -1,9 +1,9 @@
-﻿using Swashbuckle.AspNetCore.Annotations;
+﻿using BankServer.Entities.Base;
 using System.ComponentModel.DataAnnotations;
 
-namespace BankServer.Controllers.Models
+namespace BankServer.Entities
 {
-    public class BankInputModel
+    public class Bank : BaseEntity
     {
         [Required]
         [StringLength(100)]
@@ -15,5 +15,6 @@ namespace BankServer.Controllers.Models
 
         [Required]
         public int PhoneNumberId { get; set; }
+        public PhoneNumber? PhoneNumber{ get; set; }
     }
 }

@@ -29,8 +29,8 @@ namespace BankServer.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -55,15 +55,15 @@ namespace BankServer.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.ID);
+                    table.PrimaryKey("PK_Categories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -72,8 +72,8 @@ namespace BankServer.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    Phone = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -84,14 +84,14 @@ namespace BankServer.Migrations
                 name: "TransactionsTypes",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    Type = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TransactionsTypes", x => x.ID);
+                    table.PrimaryKey("PK_TransactionsTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -100,11 +100,11 @@ namespace BankServer.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    AddressId = table.Column<int>(type: "int", nullable: true),
+                    AddressId = table.Column<int>(type: "int", nullable: false),
                     Latitude = table.Column<double>(type: "float", nullable: false),
-                    Longitude = table.Column<double>(type: "float", nullable: false)
+                    Longitude = table.Column<double>(type: "float", nullable: false),
+                    Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -113,7 +113,8 @@ namespace BankServer.Migrations
                         name: "FK_Locations_Addresses_AddressId",
                         column: x => x.AddressId,
                         principalTable: "Addresses",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -175,16 +176,16 @@ namespace BankServer.Migrations
                 name: "Banks",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    PhoneNumberId = table.Column<int>(type: "int", nullable: false)
+                    PhoneNumberId = table.Column<int>(type: "int", nullable: false),
+                    Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Banks", x => x.ID);
+                    table.PrimaryKey("PK_Banks", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Banks_PhoneNumbers_PhoneNumberId",
                         column: x => x.PhoneNumberId,
@@ -282,37 +283,37 @@ namespace BankServer.Migrations
                 name: "Transactions",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Amount = table.Column<double>(type: "float", nullable: false),
-                    TypeID = table.Column<int>(type: "int", nullable: false),
-                    BankID = table.Column<int>(type: "int", nullable: false),
+                    TransactionTypeId = table.Column<int>(type: "int", nullable: false),
+                    BankId = table.Column<int>(type: "int", nullable: false),
                     LocationId = table.Column<int>(type: "int", nullable: false),
-                    AccountNumber = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CategoryID = table.Column<int>(type: "int", nullable: false)
+                    AccountId = table.Column<int>(type: "int", nullable: false),
+                    AccountNumber = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Transactions", x => x.ID);
+                    table.PrimaryKey("PK_Transactions", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Transactions_Accounts_AccountNumber",
                         column: x => x.AccountNumber,
                         principalTable: "Accounts",
-                        principalColumn: "AccountNumber",
+                        principalColumn: "AccountNumber");
+                    table.ForeignKey(
+                        name: "FK_Transactions_Banks_BankId",
+                        column: x => x.BankId,
+                        principalTable: "Banks",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Transactions_Banks_BankID",
-                        column: x => x.BankID,
-                        principalTable: "Banks",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Transactions_Categories_CategoryID",
-                        column: x => x.CategoryID,
+                        name: "FK_Transactions_Categories_CategoryId",
+                        column: x => x.CategoryId,
                         principalTable: "Categories",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Transactions_Locations_LocationId",
@@ -321,10 +322,10 @@ namespace BankServer.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Transactions_TransactionsTypes_TypeID",
-                        column: x => x.TypeID,
+                        name: "FK_Transactions_TransactionsTypes_TransactionTypeId",
+                        column: x => x.TransactionTypeId,
                         principalTable: "TransactionsTypes",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -388,14 +389,14 @@ namespace BankServer.Migrations
                 column: "AccountNumber");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transactions_BankID",
+                name: "IX_Transactions_BankId",
                 table: "Transactions",
-                column: "BankID");
+                column: "BankId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transactions_CategoryID",
+                name: "IX_Transactions_CategoryId",
                 table: "Transactions",
-                column: "CategoryID");
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transactions_LocationId",
@@ -403,9 +404,9 @@ namespace BankServer.Migrations
                 column: "LocationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transactions_TypeID",
+                name: "IX_Transactions_TransactionTypeId",
                 table: "Transactions",
-                column: "TypeID");
+                column: "TransactionTypeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

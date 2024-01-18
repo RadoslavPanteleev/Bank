@@ -11,9 +11,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BankServer.Migrations
 {
-    [DbContext(typeof(BankContext))]
-    [Migration("20240118153949_BANK")]
-    partial class BANK
+    [DbContext(typeof(AppDbContext))]
+    [Migration("20240118220133_BANK0001")]
+    partial class BANK0001
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,7 @@ namespace BankServer.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("BankServer.Models.Account", b =>
+            modelBuilder.Entity("BankServer.Entities.Account", b =>
                 {
                     b.Property<Guid?>("AccountNumber")
                         .ValueGeneratedOnAdd()
@@ -32,8 +32,8 @@ namespace BankServer.Migrations
 
                     b.Property<string>("AccountName")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -42,14 +42,16 @@ namespace BankServer.Migrations
 
                     b.Property<string>("PersonId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("AccountNumber");
+
+                    b.HasIndex("PersonId");
 
                     b.ToTable("Accounts");
                 });
 
-            modelBuilder.Entity("BankServer.Models.Address", b =>
+            modelBuilder.Entity("BankServer.Entities.Address", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -57,38 +59,33 @@ namespace BankServer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.HasKey("Id");
 
                     b.ToTable("Addresses");
                 });
 
-            modelBuilder.Entity("BankServer.Models.Bank", b =>
+            modelBuilder.Entity("BankServer.Entities.Bank", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -98,25 +95,25 @@ namespace BankServer.Migrations
                     b.Property<int>("PhoneNumberId")
                         .HasColumnType("int");
 
-                    b.HasKey("ID");
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("PhoneNumberId");
 
                     b.ToTable("Banks");
                 });
 
-            modelBuilder.Entity("BankServer.Models.Category", b =>
+            modelBuilder.Entity("BankServer.Entities.Category", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -128,12 +125,17 @@ namespace BankServer.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("ID");
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("BankServer.Models.Location", b =>
+            modelBuilder.Entity("BankServer.Entities.Location", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -141,13 +143,8 @@ namespace BankServer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("AddressId")
+                    b.Property<int>("AddressId")
                         .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Latitude")
                         .HasColumnType("float");
@@ -160,6 +157,11 @@ namespace BankServer.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId");
@@ -167,7 +169,7 @@ namespace BankServer.Migrations
                     b.ToTable("Locations");
                 });
 
-            modelBuilder.Entity("BankServer.Models.Person", b =>
+            modelBuilder.Entity("BankServer.Entities.Person", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -247,7 +249,7 @@ namespace BankServer.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("BankServer.Models.PhoneNumber", b =>
+            modelBuilder.Entity("BankServer.Entities.PhoneNumber", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -255,45 +257,43 @@ namespace BankServer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.HasKey("Id");
 
                     b.ToTable("PhoneNumbers");
                 });
 
-            modelBuilder.Entity("BankServer.Models.Transaction", b =>
+            modelBuilder.Entity("BankServer.Entities.Transaction", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<Guid>("AccountNumber")
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("AccountNumber")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("Amount")
                         .HasColumnType("float");
 
-                    b.Property<int>("BankID")
+                    b.Property<int>("BankId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CategoryID")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -301,43 +301,48 @@ namespace BankServer.Migrations
                     b.Property<int>("LocationId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TypeID")
+                    b.Property<int>("TransactionTypeId")
                         .HasColumnType("int");
 
-                    b.HasKey("ID");
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("AccountNumber");
 
-                    b.HasIndex("BankID");
+                    b.HasIndex("BankId");
 
-                    b.HasIndex("CategoryID");
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("LocationId");
 
-                    b.HasIndex("TypeID");
+                    b.HasIndex("TransactionTypeId");
 
                     b.ToTable("Transactions");
                 });
 
-            modelBuilder.Entity("BankServer.Models.TransactionType", b =>
+            modelBuilder.Entity("BankServer.Entities.TransactionType", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("ID");
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
 
                     b.ToTable("TransactionsTypes");
                 });
@@ -475,9 +480,20 @@ namespace BankServer.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("BankServer.Models.Bank", b =>
+            modelBuilder.Entity("BankServer.Entities.Account", b =>
                 {
-                    b.HasOne("BankServer.Models.PhoneNumber", "PhoneNumber")
+                    b.HasOne("BankServer.Entities.Person", "Person")
+                        .WithMany()
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Person");
+                });
+
+            modelBuilder.Entity("BankServer.Entities.Bank", b =>
+                {
+                    b.HasOne("BankServer.Entities.PhoneNumber", "PhoneNumber")
                         .WithMany()
                         .HasForeignKey("PhoneNumberId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -486,18 +502,20 @@ namespace BankServer.Migrations
                     b.Navigation("PhoneNumber");
                 });
 
-            modelBuilder.Entity("BankServer.Models.Location", b =>
+            modelBuilder.Entity("BankServer.Entities.Location", b =>
                 {
-                    b.HasOne("BankServer.Models.Address", "Address")
+                    b.HasOne("BankServer.Entities.Address", "Address")
                         .WithMany()
-                        .HasForeignKey("AddressId");
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Address");
                 });
 
-            modelBuilder.Entity("BankServer.Models.Person", b =>
+            modelBuilder.Entity("BankServer.Entities.Person", b =>
                 {
-                    b.HasOne("BankServer.Models.PhoneNumber", "PhoneNumber")
+                    b.HasOne("BankServer.Entities.PhoneNumber", "PhoneNumber")
                         .WithMany()
                         .HasForeignKey("PhoneNumberId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -506,35 +524,33 @@ namespace BankServer.Migrations
                     b.Navigation("PhoneNumber");
                 });
 
-            modelBuilder.Entity("BankServer.Models.Transaction", b =>
+            modelBuilder.Entity("BankServer.Entities.Transaction", b =>
                 {
-                    b.HasOne("BankServer.Models.Account", "Account")
+                    b.HasOne("BankServer.Entities.Account", "Account")
                         .WithMany()
-                        .HasForeignKey("AccountNumber")
+                        .HasForeignKey("AccountNumber");
+
+                    b.HasOne("BankServer.Entities.Bank", "Bank")
+                        .WithMany()
+                        .HasForeignKey("BankId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BankServer.Models.Bank", "Bank")
+                    b.HasOne("BankServer.Entities.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("BankID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("BankServer.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryID")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BankServer.Models.Location", "Location")
+                    b.HasOne("BankServer.Entities.Location", "Location")
                         .WithMany()
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BankServer.Models.TransactionType", "Type")
+                    b.HasOne("BankServer.Entities.TransactionType", "TransactionType")
                         .WithMany()
-                        .HasForeignKey("TypeID")
+                        .HasForeignKey("TransactionTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -546,7 +562,7 @@ namespace BankServer.Migrations
 
                     b.Navigation("Location");
 
-                    b.Navigation("Type");
+                    b.Navigation("TransactionType");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -560,7 +576,7 @@ namespace BankServer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("BankServer.Models.Person", null)
+                    b.HasOne("BankServer.Entities.Person", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -569,7 +585,7 @@ namespace BankServer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("BankServer.Models.Person", null)
+                    b.HasOne("BankServer.Entities.Person", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -584,7 +600,7 @@ namespace BankServer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BankServer.Models.Person", null)
+                    b.HasOne("BankServer.Entities.Person", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -593,7 +609,7 @@ namespace BankServer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("BankServer.Models.Person", null)
+                    b.HasOne("BankServer.Entities.Person", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

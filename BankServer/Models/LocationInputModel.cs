@@ -1,7 +1,7 @@
 ﻿using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 
-namespace BankServer.Controllers.Models
+namespace BankServer.Models
 {
     public class LocationInputModel
     {

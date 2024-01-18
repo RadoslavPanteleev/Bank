@@ -1,4 +1,4 @@
-﻿namespace JWTAuthentication.Authentication
+﻿namespace BankServer.Models
 {
     public static class UserRoles
     {

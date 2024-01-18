@@ -4,9 +4,9 @@ namespace BankServer.Services
 {
     public class UsersService
     {
-        private readonly BankContext bankContext;
+        private readonly AppDbContext bankContext;
 
-        public UsersService(BankContext bankContext)
+        public UsersService(AppDbContext bankContext)
         {
             this.bankContext = bankContext;
         }

@@ -1,5 +1,5 @@
 using BankServer;
-using BankServer.Models;
+using BankServer.Entities;
 using BankServer.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -45,7 +45,7 @@ builder.Services.AddSwaggerGen(option => {
 
 // For Entity Framework
 var connection = builder.Configuration.GetConnectionString("WebApiDatabase");
-builder.Services.AddDbContextPool<BankContext>(options => 
+builder.Services.AddDbContextPool<AppDbContext>(options => 
 {
     options.UseSqlServer(connection,
     x => x.EnableRetryOnFailure(maxRetryCount: 3));
@@ -53,7 +53,7 @@ builder.Services.AddDbContextPool<BankContext>(options =>
 
 // For Identity
 builder.Services.AddIdentity<Person, IdentityRole>()
-    .AddEntityFrameworkStores<BankContext>()
+    .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
 // Adding Authentication
@@ -85,22 +85,10 @@ builder.Services.AddTransient<BanksService>();
 builder.Services.AddTransient<CategoriesService>();
 builder.Services.AddTransient<LocationsService>();
 builder.Services.AddTransient<PhoneNumbersService>();
+//builder.Services.AddTransient<TransactionsService>();
 builder.Services.AddTransient<TransactionTypesService>();
 
 var app = builder.Build();
-
-using (var scope = app.Services.CreateScope())
-using (var context = scope.ServiceProvider.GetService<BankContext>())
-    try
-    {
-        context?.Database.EnsureCreated();
-        //context?.Database.MigrateAsync();
-    }
-    catch(Exception ex)
-    {
-        Console.WriteLine(ex.Message);
-        return;
-    }
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())

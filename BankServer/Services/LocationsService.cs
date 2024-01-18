@@ -1,4 +1,4 @@
-﻿using BankServer.Controllers.Models;
+﻿using BankServer.Entities;
 using BankServer.Models;
 using BankServer.Services.Base;
 using Microsoft.EntityFrameworkCore;
@@ -7,9 +7,9 @@ namespace BankServer.Services
 {
     public class LocationsService : BaseService<Location, LocationInputModel>
     {
-        private readonly BankContext bankContext;
+        private readonly AppDbContext bankContext;
 
-        public LocationsService(BankContext bankContext, ILogger<Location> logger) : base(bankContext.Locations, bankContext, logger)
+        public LocationsService(AppDbContext bankContext, ILogger<Location> logger) : base(bankContext.Locations, bankContext, logger)
         {
             this.bankContext = bankContext;
         }
@@ -47,7 +47,6 @@ namespace BankServer.Services
 
         protected override void UpdateRecord(Location destination, Location source)
         {
-            destination.ConcurrencyStamp = source.ConcurrencyStamp;
             destination.Address = source.Address;
             destination.Latitude = source.Latitude;
             destination.Longitude = source.Longitude;
