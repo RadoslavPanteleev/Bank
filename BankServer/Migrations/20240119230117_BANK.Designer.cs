@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankServer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240119000355_BANK0003")]
-    partial class BANK0003
+    [Migration("20240119230117_BANK")]
+    partial class BANK
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -72,6 +72,93 @@ namespace BankServer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Addresses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "ул. Московска № 19 София 1036"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "пл. Света Неделя № 7 София 1000"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "ул. Околовръстен път № 260 София 1766"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "бул. Витоша, № 89 Б София 1463"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "бул. България № 85 София 1404"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Description = "бул. Цариградско шосе № 111П София 1784"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Description = "бул. Тодор Александров № 117 София 1303"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Description = "бул. Цариградско шосе № 87 София 1086"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Description = "р-н Лозенец, ул. Сребърна № 16 София 1407"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Description = "ул. Славянска № 2 София 1000"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Description = "ул. Димитър Хаджикоцев № 52-54 София 1421"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Description = "бул. Тодор Александров № 26 София 1303"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Description = "бул. Тодор Александров № 81-83 София 1303"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Description = "бул. Генерал Тотлебен № 8 София 1606"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Description = "ул. Дякон Игнатий № 1 София 1000"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Description = "ул. Георг Вашингтон № 21 София 1000"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Description = "ул. Врабча № 6 София 1000"
+                        });
                 });
 
             modelBuilder.Entity("BankServer.Entities.Bank", b =>
@@ -105,6 +192,127 @@ namespace BankServer.Migrations
                     b.HasIndex("PhoneNumberId");
 
                     b.ToTable("Banks");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Address = "ул. Московска № 19 София 1036",
+                            Name = "Банка ДСК АД",
+                            PhoneNumberId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Address = "пл. Света Неделя № 7 София 1000",
+                            Name = "УниКредит Булбанк АД",
+                            PhoneNumberId = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Address = "ул. Околовръстен път № 260 София 1766",
+                            Name = "Юробанк България АД",
+                            PhoneNumberId = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Address = "бул. Витоша, № 89 Б София 1463",
+                            Name = "Обединена българска банка АД",
+                            PhoneNumberId = 4
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Address = "бул. България № 85 София 1404",
+                            Name = "Инвестбанк АД",
+                            PhoneNumberId = 5
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Address = "бул. Цариградско шосе № 111П София 1784",
+                            Name = "Първа инвестиционна банка АД",
+                            PhoneNumberId = 6
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Address = "бул. Тодор Александров № 117 София 1303",
+                            Name = "Тексим Банк АД",
+                            PhoneNumberId = 7
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Address = "бул. Цариградско шосе № 87 София 1086",
+                            Name = "Централна кооперативна банка АД",
+                            PhoneNumberId = 8
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Address = "р-н Лозенец, ул. Сребърна № 16 София 1407",
+                            Name = "Алианц Банк България АД",
+                            PhoneNumberId = 9
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Address = "ул. Славянска № 2 София 1000",
+                            Name = "Българо-американска кредитна банка АД",
+                            PhoneNumberId = 10
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Address = "ул. Димитър Хаджикоцев № 52-54 София 1421",
+                            Name = "ТИ БИ АЙ Банк EАД",
+                            PhoneNumberId = 11
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Address = "бул. Тодор Александров № 26 София 1303",
+                            Name = "ПроКредит Банк (България) EАД",
+                            PhoneNumberId = 12
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Address = "бул. Тодор Александров № 81-83 София 1303",
+                            Name = "Интернешънъл Асет Банк АД",
+                            PhoneNumberId = 13
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Address = "бул. Генерал Тотлебен № 8 София 1606",
+                            Name = "Търговска Банка Д АД",
+                            PhoneNumberId = 14
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Address = "ул. Дякон Игнатий № 1 София 1000",
+                            Name = "Българска банка за развитие ЕАД",
+                            PhoneNumberId = 15
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Address = "ул. Георг Вашингтон № 21 София 1000",
+                            Name = "Токуда Банк АД",
+                            PhoneNumberId = 16
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Address = "ул. Врабча № 6 София 1000",
+                            Name = "Общинска банка АД",
+                            PhoneNumberId = 17
+                        });
                 });
 
             modelBuilder.Entity("BankServer.Entities.Category", b =>
@@ -133,6 +341,80 @@ namespace BankServer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "",
+                            Name = "Household & Services"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "",
+                            Name = "Home Improvements"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "",
+                            Name = "Food & Drinks"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "",
+                            Name = "Transport"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "",
+                            Name = "Shopping"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Description = "",
+                            Name = "Leisure"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Description = "",
+                            Name = "Health & Beauty"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Description = "",
+                            Name = "Salary"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Description = "",
+                            Name = "Pension"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Description = "",
+                            Name = "Benefits"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Description = "",
+                            Name = "Financial"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Description = "",
+                            Name = "Other"
+                        });
                 });
 
             modelBuilder.Entity("BankServer.Entities.Location", b =>
@@ -167,6 +449,144 @@ namespace BankServer.Migrations
                     b.HasIndex("AddressId");
 
                     b.ToTable("Locations");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AddressId = 1,
+                            Latitude = 41.947000000000003,
+                            Longitude = 2.3843999999999999,
+                            Name = "Vilanova de Sau"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AddressId = 2,
+                            Latitude = 41.968589999999999,
+                            Longitude = 20.928989999999999,
+                            Name = "Dolno Palčište"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AddressId = 3,
+                            Latitude = 31.75872,
+                            Longitude = -106.48693,
+                            Name = "El Paso"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            AddressId = 4,
+                            Latitude = -3.0714999999999999,
+                            Longitude = 114.6604,
+                            Name = "Belawang"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            AddressId = 5,
+                            Latitude = 45.101649999999999,
+                            Longitude = 8.1019299999999994,
+                            Name = "Robella"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            AddressId = 6,
+                            Latitude = 34.92597,
+                            Longitude = 106.14722,
+                            Name = "Huchuan"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            AddressId = 7,
+                            Latitude = -16.603290000000001,
+                            Longitude = 59.65851,
+                            Name = "Cargados Carajos"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            AddressId = 8,
+                            Latitude = 36.788310000000003,
+                            Longitude = -3.4039999999999999,
+                            Name = "Lújar"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            AddressId = 9,
+                            Latitude = 43.816180000000003,
+                            Longitude = 10.676679999999999,
+                            Name = "Altopascio"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            AddressId = 10,
+                            Latitude = 44.715820000000001,
+                            Longitude = 22.593109999999999,
+                            Name = "Jidoștița"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            AddressId = 11,
+                            Latitude = 24.957619999999999,
+                            Longitude = 118.53364999999999,
+                            Name = "Fengzhou"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            AddressId = 12,
+                            Latitude = 40.59064,
+                            Longitude = 15.457599999999999,
+                            Name = "Salvitelle"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            AddressId = 13,
+                            Latitude = 33.06221,
+                            Longitude = 44.365639999999999,
+                            Name = "Al Maḩmūdīyah"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            AddressId = 14,
+                            Latitude = 1.0000500000000001,
+                            Longitude = 103.42186,
+                            Name = "Tanjung Balai"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            AddressId = 15,
+                            Latitude = 46.04318,
+                            Longitude = 27.58746,
+                            Name = "Pochidia"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            AddressId = 16,
+                            Latitude = 16.594819999999999,
+                            Longitude = -94.69256,
+                            Name = "La Blanca"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            AddressId = 17,
+                            Latitude = -23.529170000000001,
+                            Longitude = -47.135280000000002,
+                            Name = "São Roque"
+                        });
                 });
 
             modelBuilder.Entity("BankServer.Entities.Person", b =>
@@ -272,6 +692,93 @@ namespace BankServer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PhoneNumbers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Phone = "+359 2 939 1220"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Phone = "+359 2 923 2111"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Phone = "+359 2 8166 000"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Phone = "+359 2 811 2330; 811 2800; 811 2235"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Phone = "+359 2 818 6123; 818 6124"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Phone = "+359 2 91 001"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Phone = "+359 2 903 5501/ 5505"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Phone = "+359 2 926 62 66"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Phone = "+359 2 9215 + в. ; 9215 404"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Phone = "+359 2 9658 358; 9658 345"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Phone = "+359 2 970 24 10; 8163 900"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Phone = "+359 2 8135 100; 8135 808"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Phone = "+359 2 8120 234; 9204 303"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Phone = "+359 2 935 7171; 464 1171"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Phone = "+359 2 9 306 333"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Phone = "+359 2 403 79 00; 02 40379 85"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Phone = "+359 2 9300 111"
+                        });
                 });
 
             modelBuilder.Entity("BankServer.Entities.Transaction", b =>
@@ -347,6 +854,38 @@ namespace BankServer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TransactionsTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Type = "External"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Type = "Internal"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Type = "Cash"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Type = "Non-cash"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Type = "Credit"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Type = "Personal"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

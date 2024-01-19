@@ -27,6 +27,7 @@
   <ItemGroup>
     <Folder Include="Controllers\Base\" />
     <Folder Include="Migrations\" />
+    <Folder Include="Models\Reports\" />
   </ItemGroup>
 
 </Project>

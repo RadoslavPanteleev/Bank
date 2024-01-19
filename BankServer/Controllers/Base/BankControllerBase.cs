@@ -5,7 +5,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace BankServer.Controllers.Base
 {
-    public class BankControllerBase<TEntity, TInputModel, TService> : ControllerBase
+    public abstract class BankControllerBase<TEntity, TInputModel, TService> : ControllerBase
         where TEntity : class
         where TInputModel : class
         where TService : BaseService<TEntity, TInputModel>

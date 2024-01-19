@@ -79,6 +79,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// Registers
 builder.Services.AddTransient<AccountsService>();
 builder.Services.AddTransient<AddressesService>();
 builder.Services.AddTransient<BanksService>();
@@ -88,6 +89,9 @@ builder.Services.AddTransient<PhoneNumbersService>();
 builder.Services.AddTransient<ProfileService>();
 builder.Services.AddTransient<TransactionsService>();
 builder.Services.AddTransient<TransactionTypesService>();
+
+// Reports
+
 
 var app = builder.Build();
 
