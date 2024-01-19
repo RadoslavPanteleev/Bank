@@ -21,7 +21,7 @@ namespace BankServer.Models
         public int LocationId { get; set; }
 
         [Required]
-        public int AccountId { get; set; }
+        public Guid AccountNumber { get; set; }
 
         [Required]
         public int CategoryId { get; set; }
