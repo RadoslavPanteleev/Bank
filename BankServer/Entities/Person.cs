@@ -16,6 +16,7 @@ namespace BankServer.Entities
         [Required]
         public new PhoneNumber? PhoneNumber { get; set; }
 
-        public int AddressId { get; set; }
+        public int? AddressId { get; set; } = null;
+        public Address? Address { get; set; }
     }
 }

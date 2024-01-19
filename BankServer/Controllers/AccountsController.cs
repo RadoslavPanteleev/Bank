@@ -80,6 +80,7 @@ namespace BankServer.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = ex.Message });
             }
         }
+
         [SwaggerOperation(Summary = "Update account name only")]
         [SwaggerResponse(StatusCodes.Status200OK, Description = "if updated")]
         [SwaggerResponse(StatusCodes.Status304NotModified, Description = "if record is already updated from another instance. Please read the latest version of record before edit.")]

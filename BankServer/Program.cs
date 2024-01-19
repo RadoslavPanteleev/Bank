@@ -85,6 +85,7 @@ builder.Services.AddTransient<BanksService>();
 builder.Services.AddTransient<CategoriesService>();
 builder.Services.AddTransient<LocationsService>();
 builder.Services.AddTransient<PhoneNumbersService>();
+builder.Services.AddTransient<ProfileService>();
 //builder.Services.AddTransient<TransactionsService>();
 builder.Services.AddTransient<TransactionTypesService>();
 
