@@ -24,7 +24,7 @@ namespace BankServer.Entities
         public Location? Location { get; set; }
 
         [Required]
-        public int AccountId { get; set; }
+        public Guid? AccountId { get; set; }
         public Account? Account { get; set; }
 
         [Required]

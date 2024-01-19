@@ -38,7 +38,6 @@ namespace BankServer.Services
             return await appDdContext.Transactions
                 .Include(t => t.TransactionType)
                 .Include(t => t.Bank)
-                .Include(t => t.Bank!.PhoneNumber)
                 .Include(t => t.Location)
                 .Include(t => t.Location!.Address)
                 .Include(t => t.Account)
@@ -55,7 +54,6 @@ namespace BankServer.Services
                 await appDdContext.Transactions
                 .Include(t => t.TransactionType)
                 .Include(t => t.Bank)
-                .Include(t => t.Bank!.PhoneNumber)
                 .Include(t => t.Location)
                 .Include(t => t.Location!.Address)
                 .Include(t => t.Account)

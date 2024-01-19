@@ -11,14 +11,12 @@ namespace BankServer.Services
         private readonly AppDbContext appDbContext;
         private readonly UserManager<Person> userManager;
         private readonly AddressesService addressesService;
-        private readonly PhoneNumbersService phoneNumberService;
         private readonly ILogger logger;
 
-        public ProfileService(AppDbContext appDbContext, AddressesService addressesService, PhoneNumbersService phoneNumberService, UserManager<Person> userManager, ILogger<ProfileService> logger)
+        public ProfileService(AppDbContext appDbContext, AddressesService addressesService, UserManager<Person> userManager, ILogger<ProfileService> logger)
         {
             this.appDbContext = appDbContext;
             this.addressesService = addressesService;
-            this.phoneNumberService = phoneNumberService;
             this.userManager = userManager;
             this.logger = logger;
         }
@@ -26,7 +24,7 @@ namespace BankServer.Services
         public async Task<GetProfileInfoResponse?> GetProfileInfo(string userName)
         {
             var normalizedName = userManager.NormalizeName(userName);
-            var person = await appDbContext.Peoples.Include(p => p.PhoneNumber).Include(a => a.Address).SingleOrDefaultAsync(x => x.UserName == normalizedName);
+            var person = await appDbContext.Peoples.Include(a => a.Address).SingleOrDefaultAsync(x => x.UserName == normalizedName);
             if (person is null)
                 return null;
 
@@ -37,7 +35,7 @@ namespace BankServer.Services
                 FirstName = person.FirstName,
                 LastName = person.LastName,
                 Email = person.Email,
-                PhoneNumber = person.PhoneNumber,
+                Phone = person.Phone,
                 Address = person.Address,
                 AccessFailedCount = person.AccessFailedCount
             };
@@ -53,7 +51,7 @@ namespace BankServer.Services
                     try
                     {
                         var normalizedName = userManager.NormalizeName(userName);
-                        var person = await appDbContext.Peoples.Include(p => p.PhoneNumber).Include(a => a.Address).SingleOrDefaultAsync(x => x.UserName == normalizedName);
+                        var person = await appDbContext.Peoples.Include(a => a.Address).SingleOrDefaultAsync(x => x.UserName == normalizedName);
                         if (person is null)
                             throw new NullReferenceException();
 
@@ -67,18 +65,7 @@ namespace BankServer.Services
                                 throw new Exception(string.Join(",", result.Errors.Select(s => $"{s.Code}: {s.Description}")));
                         }
 
-                        if (!person.PhoneNumber?.Phone?.Equals(editProfileInput.PhoneNumber, StringComparison.OrdinalIgnoreCase) ?? false)
-                        {
-                            var phoneNumber = await this.phoneNumberService.GetPhoneNumber(editProfileInput.PhoneNumber);
-                            if (phoneNumber is null)
-                            {
-                                phoneNumber = await this.phoneNumberService.CreateAsync(new PhoneNumber { Phone = editProfileInput.PhoneNumber });
-                                if (phoneNumber is null)
-                                    throw new Exception("Error creating phone number!");
-                            }
-
-                            person.PhoneNumber = phoneNumber;
-                        }
+                        person.Phone = editProfileInput.PhoneNumber;
 
                         if (person.AddressId != editProfileInput.AddressId)
                         {

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankServer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240119230117_BANK")]
+    [Migration("20240119232146_BANK")]
     partial class BANK
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,14 +35,14 @@ namespace BankServer.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PersonId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
 
                     b.HasKey("AccountNumber");
 
@@ -179,8 +179,9 @@ namespace BankServer.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("PhoneNumberId")
-                        .HasColumnType("int");
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Version")
                         .IsConcurrencyToken()
@@ -188,8 +189,6 @@ namespace BankServer.Migrations
                         .HasColumnType("rowversion");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PhoneNumberId");
 
                     b.ToTable("Banks");
 
@@ -199,119 +198,119 @@ namespace BankServer.Migrations
                             Id = 1,
                             Address = "ул. Московска № 19 София 1036",
                             Name = "Банка ДСК АД",
-                            PhoneNumberId = 1
+                            Phone = "+359 2 939 1220"
                         },
                         new
                         {
                             Id = 2,
                             Address = "пл. Света Неделя № 7 София 1000",
                             Name = "УниКредит Булбанк АД",
-                            PhoneNumberId = 2
+                            Phone = "+359 2 923 2111"
                         },
                         new
                         {
                             Id = 3,
                             Address = "ул. Околовръстен път № 260 София 1766",
                             Name = "Юробанк България АД",
-                            PhoneNumberId = 3
+                            Phone = "+359 2 8166 000"
                         },
                         new
                         {
                             Id = 4,
                             Address = "бул. Витоша, № 89 Б София 1463",
                             Name = "Обединена българска банка АД",
-                            PhoneNumberId = 4
+                            Phone = "+359 2 811 2330; 811 2800; 811 2235"
                         },
                         new
                         {
                             Id = 5,
                             Address = "бул. България № 85 София 1404",
                             Name = "Инвестбанк АД",
-                            PhoneNumberId = 5
+                            Phone = "+359 2 818 6123; 818 6124"
                         },
                         new
                         {
                             Id = 6,
                             Address = "бул. Цариградско шосе № 111П София 1784",
                             Name = "Първа инвестиционна банка АД",
-                            PhoneNumberId = 6
+                            Phone = "+359 2 91 001"
                         },
                         new
                         {
                             Id = 7,
                             Address = "бул. Тодор Александров № 117 София 1303",
                             Name = "Тексим Банк АД",
-                            PhoneNumberId = 7
+                            Phone = "+359 2 903 5501/ 5505"
                         },
                         new
                         {
                             Id = 8,
                             Address = "бул. Цариградско шосе № 87 София 1086",
                             Name = "Централна кооперативна банка АД",
-                            PhoneNumberId = 8
+                            Phone = "+359 2 926 62 66"
                         },
                         new
                         {
                             Id = 9,
                             Address = "р-н Лозенец, ул. Сребърна № 16 София 1407",
                             Name = "Алианц Банк България АД",
-                            PhoneNumberId = 9
+                            Phone = "+359 2 9215 + в. ; 9215 404"
                         },
                         new
                         {
                             Id = 10,
                             Address = "ул. Славянска № 2 София 1000",
                             Name = "Българо-американска кредитна банка АД",
-                            PhoneNumberId = 10
+                            Phone = "+359 2 9658 358; 9658 345"
                         },
                         new
                         {
                             Id = 11,
                             Address = "ул. Димитър Хаджикоцев № 52-54 София 1421",
                             Name = "ТИ БИ АЙ Банк EАД",
-                            PhoneNumberId = 11
+                            Phone = "+359 2 970 24 10; 8163 900"
                         },
                         new
                         {
                             Id = 12,
                             Address = "бул. Тодор Александров № 26 София 1303",
                             Name = "ПроКредит Банк (България) EАД",
-                            PhoneNumberId = 12
+                            Phone = "+359 2 8135 100; 8135 808"
                         },
                         new
                         {
                             Id = 13,
                             Address = "бул. Тодор Александров № 81-83 София 1303",
                             Name = "Интернешънъл Асет Банк АД",
-                            PhoneNumberId = 13
+                            Phone = "+359 2 8120 234; 9204 303"
                         },
                         new
                         {
                             Id = 14,
                             Address = "бул. Генерал Тотлебен № 8 София 1606",
                             Name = "Търговска Банка Д АД",
-                            PhoneNumberId = 14
+                            Phone = "+359 2 935 7171; 464 1171"
                         },
                         new
                         {
                             Id = 15,
                             Address = "ул. Дякон Игнатий № 1 София 1000",
                             Name = "Българска банка за развитие ЕАД",
-                            PhoneNumberId = 15
+                            Phone = "+359 2 9 306 333"
                         },
                         new
                         {
                             Id = 16,
                             Address = "ул. Георг Вашингтон № 21 София 1000",
                             Name = "Токуда Банк АД",
-                            PhoneNumberId = 16
+                            Phone = "+359 2 403 79 00; 02 40379 85"
                         },
                         new
                         {
                             Id = 17,
                             Address = "ул. Врабча № 6 София 1000",
                             Name = "Общинска банка АД",
-                            PhoneNumberId = 17
+                            Phone = "+359 2 9300 111"
                         });
                 });
 
@@ -638,11 +637,16 @@ namespace BankServer.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<int>("PhoneNumberId")
-                        .HasColumnType("int");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -666,119 +670,7 @@ namespace BankServer.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("PhoneNumberId");
-
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("BankServer.Entities.PhoneNumber", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<byte[]>("Version")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PhoneNumbers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Phone = "+359 2 939 1220"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Phone = "+359 2 923 2111"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Phone = "+359 2 8166 000"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Phone = "+359 2 811 2330; 811 2800; 811 2235"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Phone = "+359 2 818 6123; 818 6124"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Phone = "+359 2 91 001"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Phone = "+359 2 903 5501/ 5505"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Phone = "+359 2 926 62 66"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Phone = "+359 2 9215 + в. ; 9215 404"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Phone = "+359 2 9658 358; 9658 345"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Phone = "+359 2 970 24 10; 8163 900"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Phone = "+359 2 8135 100; 8135 808"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Phone = "+359 2 8120 234; 9204 303"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Phone = "+359 2 935 7171; 464 1171"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            Phone = "+359 2 9 306 333"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            Phone = "+359 2 403 79 00; 02 40379 85"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            Phone = "+359 2 9300 111"
-                        });
                 });
 
             modelBuilder.Entity("BankServer.Entities.Transaction", b =>
@@ -789,10 +681,8 @@ namespace BankServer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("AccountNumber")
+                    b.Property<Guid?>("AccountId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("Amount")
@@ -820,7 +710,7 @@ namespace BankServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountNumber");
+                    b.HasIndex("AccountId");
 
                     b.HasIndex("BankId");
 
@@ -1032,17 +922,6 @@ namespace BankServer.Migrations
                     b.Navigation("Person");
                 });
 
-            modelBuilder.Entity("BankServer.Entities.Bank", b =>
-                {
-                    b.HasOne("BankServer.Entities.PhoneNumber", "PhoneNumber")
-                        .WithMany()
-                        .HasForeignKey("PhoneNumberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PhoneNumber");
-                });
-
             modelBuilder.Entity("BankServer.Entities.Location", b =>
                 {
                     b.HasOne("BankServer.Entities.Address", "Address")
@@ -1060,22 +939,16 @@ namespace BankServer.Migrations
                         .WithMany()
                         .HasForeignKey("AddressId");
 
-                    b.HasOne("BankServer.Entities.PhoneNumber", "PhoneNumber")
-                        .WithMany()
-                        .HasForeignKey("PhoneNumberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Address");
-
-                    b.Navigation("PhoneNumber");
                 });
 
             modelBuilder.Entity("BankServer.Entities.Transaction", b =>
                 {
                     b.HasOne("BankServer.Entities.Account", "Account")
                         .WithMany()
-                        .HasForeignKey("AccountNumber");
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("BankServer.Entities.Bank", "Bank")
                         .WithMany()

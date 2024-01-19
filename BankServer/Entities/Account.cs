@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace BankServer.Entities
 {
@@ -8,8 +9,9 @@ namespace BankServer.Entities
         [Key]
         public Guid? AccountNumber { get; set; }
 
-        [ConcurrencyCheck]
-        public string ConcurrencyStamp { get; set; } = Guid.NewGuid().ToString();
+        [Timestamp]
+        [JsonIgnore]
+        public byte[]? Version { get; set; }
 
         [Required]
         [MaxLength(100)]

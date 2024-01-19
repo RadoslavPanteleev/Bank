@@ -14,7 +14,8 @@ namespace BankServer.Entities
         public string? LastName { get; set; }
 
         [Required]
-        public new PhoneNumber? PhoneNumber { get; set; }
+        [StringLength(100)]
+        public string? Phone { get; set; }
 
         public int? AddressId { get; set; } = null;
         public Address? Address { get; set; }

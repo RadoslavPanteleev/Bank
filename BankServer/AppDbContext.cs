@@ -23,7 +23,6 @@ namespace BankServer
         public DbSet<Category> Categories { get; set; } = null!;
         public DbSet<Location> Locations { get; set; } = null!;
         public DbSet<Person> Peoples { get; set; } = null!;
-        public DbSet<PhoneNumber> PhoneNumbers { get; set; } = null!;
         public DbSet<Transaction> Transactions { get; set; } = null!;
         public DbSet<TransactionType> TransactionsTypes { get; set; } = null!;
     }

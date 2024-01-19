@@ -15,12 +15,12 @@ namespace BankServer.Services
 
         public override async Task<Bank?> GetRecord(int id)
         {
-            return await bankContext.Banks.Include(x => x.PhoneNumber).SingleOrDefaultAsync(x => x.Id == id);
+            return await bankContext.Banks.SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public override async Task<IList<Bank>> GetAll()
         {
-            return await bankContext.Banks.Include(x => x.PhoneNumber).ToListAsync();
+            return await bankContext.Banks.ToListAsync();
         }
 
         public override int GetID(Bank record)
@@ -28,25 +28,22 @@ namespace BankServer.Services
             return record.Id;
         }
 
-        protected override async Task<Bank> GetRecord(BankInputModel source)
+        protected override Task<Bank> GetRecord(BankInputModel source)
         {
             var bank = new Bank
             {
                 Name = source.Name,
                 Address = source.Address,
-                PhoneNumber = await bankContext.PhoneNumbers.FindAsync(source.PhoneNumberId)
+                Phone = source.PhoneNumber
             };
 
-            if (bank.PhoneNumber is null)
-                throw new KeyNotFoundException($"PhoneNumberId '{source.PhoneNumberId}' not found!");
-
-            return bank;
+            return Task.FromResult(bank);
         }
 
         protected override void UpdateRecord(Bank destination, Bank source)
         {
             destination.Address = source.Address;
-            destination.PhoneNumber = source.PhoneNumber;
+            destination.Phone = source.Phone;
             destination.Name = source.Name;
         }
     }

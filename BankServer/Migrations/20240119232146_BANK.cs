@@ -38,6 +38,22 @@ namespace BankServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Banks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Banks", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Categories",
                 columns: table => new
                 {
@@ -53,20 +69,6 @@ namespace BankServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PhoneNumbers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Phone = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PhoneNumbers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "TransactionsTypes",
                 columns: table => new
                 {
@@ -78,6 +80,40 @@ namespace BankServer.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TransactionsTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    AddressId = table.Column<int>(type: "int", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_Addresses_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Addresses",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -125,72 +161,11 @@ namespace BankServer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    PhoneNumberId = table.Column<int>(type: "int", nullable: false),
-                    AddressId = table.Column<int>(type: "int", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_Addresses_AddressId",
-                        column: x => x.AddressId,
-                        principalTable: "Addresses",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_PhoneNumbers_PhoneNumberId",
-                        column: x => x.PhoneNumberId,
-                        principalTable: "PhoneNumbers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Banks",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    PhoneNumberId = table.Column<int>(type: "int", nullable: false),
-                    Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Banks", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Banks_PhoneNumbers_PhoneNumberId",
-                        column: x => x.PhoneNumberId,
-                        principalTable: "PhoneNumbers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Accounts",
                 columns: table => new
                 {
                     AccountNumber = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true),
                     AccountName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PersonId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -301,8 +276,7 @@ namespace BankServer.Migrations
                     TransactionTypeId = table.Column<int>(type: "int", nullable: false),
                     BankId = table.Column<int>(type: "int", nullable: false),
                     LocationId = table.Column<int>(type: "int", nullable: false),
-                    AccountId = table.Column<int>(type: "int", nullable: false),
-                    AccountNumber = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
@@ -310,10 +284,11 @@ namespace BankServer.Migrations
                 {
                     table.PrimaryKey("PK_Transactions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Transactions_Accounts_AccountNumber",
-                        column: x => x.AccountNumber,
+                        name: "FK_Transactions_Accounts_AccountId",
+                        column: x => x.AccountId,
                         principalTable: "Accounts",
-                        principalColumn: "AccountNumber");
+                        principalColumn: "AccountNumber",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Transactions_Banks_BankId",
                         column: x => x.BankId,
@@ -365,6 +340,30 @@ namespace BankServer.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Banks",
+                columns: new[] { "Id", "Address", "Name", "Phone" },
+                values: new object[,]
+                {
+                    { 1, "ул. Московска № 19 София 1036", "Банка ДСК АД", "+359 2 939 1220" },
+                    { 2, "пл. Света Неделя № 7 София 1000", "УниКредит Булбанк АД", "+359 2 923 2111" },
+                    { 3, "ул. Околовръстен път № 260 София 1766", "Юробанк България АД", "+359 2 8166 000" },
+                    { 4, "бул. Витоша, № 89 Б София 1463", "Обединена българска банка АД", "+359 2 811 2330; 811 2800; 811 2235" },
+                    { 5, "бул. България № 85 София 1404", "Инвестбанк АД", "+359 2 818 6123; 818 6124" },
+                    { 6, "бул. Цариградско шосе № 111П София 1784", "Първа инвестиционна банка АД", "+359 2 91 001" },
+                    { 7, "бул. Тодор Александров № 117 София 1303", "Тексим Банк АД", "+359 2 903 5501/ 5505" },
+                    { 8, "бул. Цариградско шосе № 87 София 1086", "Централна кооперативна банка АД", "+359 2 926 62 66" },
+                    { 9, "р-н Лозенец, ул. Сребърна № 16 София 1407", "Алианц Банк България АД", "+359 2 9215 + в. ; 9215 404" },
+                    { 10, "ул. Славянска № 2 София 1000", "Българо-американска кредитна банка АД", "+359 2 9658 358; 9658 345" },
+                    { 11, "ул. Димитър Хаджикоцев № 52-54 София 1421", "ТИ БИ АЙ Банк EАД", "+359 2 970 24 10; 8163 900" },
+                    { 12, "бул. Тодор Александров № 26 София 1303", "ПроКредит Банк (България) EАД", "+359 2 8135 100; 8135 808" },
+                    { 13, "бул. Тодор Александров № 81-83 София 1303", "Интернешънъл Асет Банк АД", "+359 2 8120 234; 9204 303" },
+                    { 14, "бул. Генерал Тотлебен № 8 София 1606", "Търговска Банка Д АД", "+359 2 935 7171; 464 1171" },
+                    { 15, "ул. Дякон Игнатий № 1 София 1000", "Българска банка за развитие ЕАД", "+359 2 9 306 333" },
+                    { 16, "ул. Георг Вашингтон № 21 София 1000", "Токуда Банк АД", "+359 2 403 79 00; 02 40379 85" },
+                    { 17, "ул. Врабча № 6 София 1000", "Общинска банка АД", "+359 2 9300 111" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "Description", "Name" },
                 values: new object[,]
@@ -376,42 +375,18 @@ namespace BankServer.Migrations
                     { 5, "", "Shopping" },
                     { 6, "", "Leisure" },
                     { 7, "", "Health & Beauty" },
-                    { 8, "", "Salary" },
+                    { 8, "", "Salary" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "Id", "Description", "Name" },
+                values: new object[,]
+                {
                     { 9, "", "Pension" },
                     { 10, "", "Benefits" },
                     { 11, "", "Financial" },
                     { 12, "", "Other" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "PhoneNumbers",
-                columns: new[] { "Id", "Phone" },
-                values: new object[,]
-                {
-                    { 1, "+359 2 939 1220" },
-                    { 2, "+359 2 923 2111" },
-                    { 3, "+359 2 8166 000" },
-                    { 4, "+359 2 811 2330; 811 2800; 811 2235" },
-                    { 5, "+359 2 818 6123; 818 6124" },
-                    { 6, "+359 2 91 001" },
-                    { 7, "+359 2 903 5501/ 5505" },
-                    { 8, "+359 2 926 62 66" },
-                    { 9, "+359 2 9215 + в. ; 9215 404" },
-                    { 10, "+359 2 9658 358; 9658 345" },
-                    { 11, "+359 2 970 24 10; 8163 900" },
-                    { 12, "+359 2 8135 100; 8135 808" },
-                    { 13, "+359 2 8120 234; 9204 303" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "PhoneNumbers",
-                columns: new[] { "Id", "Phone" },
-                values: new object[,]
-                {
-                    { 14, "+359 2 935 7171; 464 1171" },
-                    { 15, "+359 2 9 306 333" },
-                    { 16, "+359 2 403 79 00; 02 40379 85" },
-                    { 17, "+359 2 9300 111" }
                 });
 
             migrationBuilder.InsertData(
@@ -425,30 +400,6 @@ namespace BankServer.Migrations
                     { 4, "Non-cash" },
                     { 5, "Credit" },
                     { 6, "Personal" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Banks",
-                columns: new[] { "Id", "Address", "Name", "PhoneNumberId" },
-                values: new object[,]
-                {
-                    { 1, "ул. Московска № 19 София 1036", "Банка ДСК АД", 1 },
-                    { 2, "пл. Света Неделя № 7 София 1000", "УниКредит Булбанк АД", 2 },
-                    { 3, "ул. Околовръстен път № 260 София 1766", "Юробанк България АД", 3 },
-                    { 4, "бул. Витоша, № 89 Б София 1463", "Обединена българска банка АД", 4 },
-                    { 5, "бул. България № 85 София 1404", "Инвестбанк АД", 5 },
-                    { 6, "бул. Цариградско шосе № 111П София 1784", "Първа инвестиционна банка АД", 6 },
-                    { 7, "бул. Тодор Александров № 117 София 1303", "Тексим Банк АД", 7 },
-                    { 8, "бул. Цариградско шосе № 87 София 1086", "Централна кооперативна банка АД", 8 },
-                    { 9, "р-н Лозенец, ул. Сребърна № 16 София 1407", "Алианц Банк България АД", 9 },
-                    { 10, "ул. Славянска № 2 София 1000", "Българо-американска кредитна банка АД", 10 },
-                    { 11, "ул. Димитър Хаджикоцев № 52-54 София 1421", "ТИ БИ АЙ Банк EАД", 11 },
-                    { 12, "бул. Тодор Александров № 26 София 1303", "ПроКредит Банк (България) EАД", 12 },
-                    { 13, "бул. Тодор Александров № 81-83 София 1303", "Интернешънъл Асет Банк АД", 13 },
-                    { 14, "бул. Генерал Тотлебен № 8 София 1606", "Търговска Банка Д АД", 14 },
-                    { 15, "ул. Дякон Игнатий № 1 София 1000", "Българска банка за развитие ЕАД", 15 },
-                    { 16, "ул. Георг Вашингтон № 21 София 1000", "Токуда Банк АД", 16 },
-                    { 17, "ул. Врабча № 6 София 1000", "Общинска банка АД", 17 }
                 });
 
             migrationBuilder.InsertData(
@@ -518,11 +469,6 @@ namespace BankServer.Migrations
                 column: "AddressId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_PhoneNumberId",
-                table: "AspNetUsers",
-                column: "PhoneNumberId");
-
-            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -530,19 +476,14 @@ namespace BankServer.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Banks_PhoneNumberId",
-                table: "Banks",
-                column: "PhoneNumberId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Locations_AddressId",
                 table: "Locations",
                 column: "AddressId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transactions_AccountNumber",
+                name: "IX_Transactions_AccountId",
                 table: "Transactions",
-                column: "AccountNumber");
+                column: "AccountId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transactions_BankId",
@@ -608,9 +549,6 @@ namespace BankServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "Addresses");
-
-            migrationBuilder.DropTable(
-                name: "PhoneNumbers");
         }
     }
 }

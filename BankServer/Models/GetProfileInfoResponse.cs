@@ -14,7 +14,7 @@ namespace BankServer.Models
 
         public string? Email { get; set; }
 
-        public PhoneNumber? PhoneNumber { get; set; }
+        public string? Phone { get; set; }
 
         public Address? Address { get; set; }
 
