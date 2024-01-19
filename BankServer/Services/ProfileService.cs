@@ -1,4 +1,5 @@
 ﻿using BankServer.Entities;
+using BankServer.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Data;

@@ -4,10 +4,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BankServer
 {
-    public class AppDbContext : IdentityDbContext<Person>
+    public partial class AppDbContext : IdentityDbContext<Person>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            Seed(builder);
         }
 
         // Entities

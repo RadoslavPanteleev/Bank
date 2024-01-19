@@ -1,4 +1,4 @@
-﻿namespace BankServer.Entities
+﻿namespace BankServer.Models
 {
     public class EditProfileInput
     {

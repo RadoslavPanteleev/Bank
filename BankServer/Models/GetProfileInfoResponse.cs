@@ -1,4 +1,6 @@
-﻿namespace BankServer.Entities
+﻿using BankServer.Entities;
+
+namespace BankServer.Models
 {
     public class GetProfileInfoResponse
     {
