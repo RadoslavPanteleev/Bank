@@ -89,7 +89,7 @@ namespace BankServer
             builder.ApplyConfiguration(new UsersConfiguration());
             builder.ApplyConfiguration(new UsersWithRolesConfiguration());
 
-            
+
             // 100 users generate
             var faker = new Faker<Entities.Person>()
                 .RuleFor(u => u.Id, f => f.Random.Guid().ToString())
@@ -106,6 +106,7 @@ namespace BankServer
                 .RuleFor(u => u.PasswordHash, (f, u) => new PasswordHasher<Entities.Person>().HashPassword(u, "Test1234."));
 
             ;
+
             var users = faker.Generate(100);
             builder.Entity<Entities.Person>().HasData(users);
 
@@ -121,18 +122,18 @@ namespace BankServer
             // Random 1 - 10 accounts for 100 users
             var accounts = users.SelectMany(user =>
             Enumerable.Range(1, new Faker().Random.Number(1, 10)).Select(i => new Account
-                {
+            {
                 AccountNumber = Guid.NewGuid(),
                 AccountName = new Faker().Finance.AccountName(),
                 PersonId = user.Id
-                })
+            })
             ).ToList();
             builder.Entity<Account>().HasData(accounts);
 
             // Random 1 - 100 transactions for all accounts
             int id = 1;
             var transactions = new List<Transaction>();
-            
+
             Parallel.ForEach(accounts, account =>
             {
                 var numberOfTransactions = new Faker().Random.Number(1, 10);

@@ -38,17 +38,17 @@ builder.Services.AddSwaggerGen(option => {
                     Id="Bearer"
                 }
             },
-            new string[]{}
+            Array.Empty<string>()
         }
     });
 });
 
 // For Entity Framework
 var connection = builder.Configuration.GetConnectionString("WebApiDatabase");
-builder.Services.AddDbContextPool<AppDbContext>(options => 
+builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer(connection,
-    x => x.EnableRetryOnFailure(maxRetryCount: 3));
+    options.UseSqlServer(connection, 
+        x => x.EnableRetryOnFailure(maxRetryCount: 3));
 });
 
 // For Identity
@@ -94,6 +94,18 @@ builder.Services.AddTransient<TransactionTypesService>();
 
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+using (var context = scope.ServiceProvider.GetService<AppDbContext>())
+    try
+    {
+        context?.Database.EnsureCreated();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+        return;
+    }
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
