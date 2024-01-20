@@ -43,14 +43,31 @@ namespace BankServer.Services
 
         public async Task<Account?> UpdateAccount(AccountInputModel inputModel, Guid accountNumber)
         {
-            var account = await appDbContext.Accounts.SingleOrDefaultAsync(x => x.AccountNumber == accountNumber);
-            if (account is null)
-                throw new NullReferenceException("AccountInputModel");
+            var strategy = appDbContext.Database.CreateExecutionStrategy();
+            return await strategy.ExecuteAsync(async () =>
+            {
+                using var dbContextTransaction = await appDbContext.Database.BeginTransactionAsync(IsolationLevel.Serializable);
+                try
+                {
+                    var account = await appDbContext.Accounts.SingleOrDefaultAsync(x => x.AccountNumber == accountNumber);
+                    if (account is null)
+                        throw new NullReferenceException("AccountInputModel");
 
-            account.AccountName = inputModel.AccountName;
+                    account.AccountName = inputModel.AccountName;
 
-            await appDbContext.SaveChangesAsync();
-            return account;
+                    await appDbContext.SaveChangesAsync();
+                    await dbContextTransaction.CommitAsync();
+
+                    return account;
+                }
+                catch (Exception ex)
+                {
+                    await dbContextTransaction.RollbackAsync();
+                    this.logger.LogError(ex.Message);
+                }
+
+                return null;
+            });
         }
 
         public async Task DeleteAccount(Guid accountNumber)
@@ -58,24 +75,22 @@ namespace BankServer.Services
             var strategy = appDbContext.Database.CreateExecutionStrategy();
             await strategy.ExecuteAsync(async () =>
             {
-                using (var dbContextTransaction = await appDbContext.Database.BeginTransactionAsync(IsolationLevel.Serializable))
+                using var dbContextTransaction = await appDbContext.Database.BeginTransactionAsync(IsolationLevel.Serializable);
+                try
                 {
-                    try
-                    {
-                        var account = await appDbContext.Accounts.SingleOrDefaultAsync(x => x.AccountNumber == accountNumber);
-                        if (account is null)
-                            throw new NullReferenceException(accountNumber.ToString());
+                    var account = await appDbContext.Accounts.SingleOrDefaultAsync(x => x.AccountNumber == accountNumber);
+                    if (account is null)
+                        throw new NullReferenceException(accountNumber.ToString());
 
-                        appDbContext.Accounts.Remove(account);
-                        await appDbContext.SaveChangesAsync();
+                    appDbContext.Accounts.Remove(account);
+                    await appDbContext.SaveChangesAsync();
 
-                        await dbContextTransaction.CommitAsync();
-                    }
-                    catch (Exception ex)
-                    {
-                        await dbContextTransaction.RollbackAsync();
-                        this.logger.LogError(ex.Message);
-                    }
+                    await dbContextTransaction.CommitAsync();
+                }
+                catch (Exception ex)
+                {
+                    await dbContextTransaction.RollbackAsync();
+                    this.logger.LogError(ex.Message);
                 }
             });
         }

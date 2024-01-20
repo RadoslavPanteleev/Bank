@@ -1,19 +1,16 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace BankServer.Services.Base
 {
-    public abstract class BaseService<TEntity, TInputModel>
+    public abstract class RepositoryBaseService<TEntity, TInputModel>
         where TEntity : class
         where TInputModel : class
     {
-        protected readonly DbSet<TEntity> entities;
         protected readonly DbContext dbContext;
         private readonly ILogger logger;
 
-        public BaseService(DbSet<TEntity> entities, DbContext dbContext, ILogger<TEntity> logger)
+        public RepositoryBaseService(DbContext dbContext, ILogger<TEntity> logger)
         {
-            this.entities = entities;
             this.dbContext = dbContext;
             this.logger = logger;
         }
@@ -25,40 +22,40 @@ namespace BankServer.Services.Base
         /// <returns> Returns ID from record </returns>
         public abstract int GetID(TEntity record);
 
-        protected abstract Task<TEntity> GetRecord(TInputModel inputModel);
+        protected abstract Task<TEntity> MapModel(TInputModel inputModel);
 
-        public virtual async Task<TEntity?> GetRecord(int id)
+        public virtual async Task<TEntity?> GetRecordAsync(int id)
         {
-            return await entities.FindAsync(id);
+            return await dbContext.Set<TEntity>().FindAsync(id);
         }
 
-        protected abstract void UpdateRecord(TEntity destination, TEntity source);
+        protected abstract void CopyValues(TEntity destination, TEntity source);
 
         #endregion
 
         #region Public methods
 
-        public virtual async Task<IList<TEntity>> GetAll()
+        public virtual async Task<IList<TEntity>> GetAllAsync()
         {
-            return await entities.ToListAsync();
+            return await dbContext.Set<TEntity>().ToListAsync();
         }
 
-        public virtual async Task<TEntity?> Get(int id)
+        public virtual async Task<TEntity?> GetAsync(int id)
         {
-            return await GetRecord(id);
+            return await GetRecordAsync(id);
         }
 
         public virtual async Task<TEntity?> CreateAsync(TInputModel inputModel)
         {
-            var record = await GetRecord(inputModel);
+            var record = await MapModel(inputModel);
 
-            await entities.AddAsync(record);
+            await dbContext.Set<TEntity>().AddAsync(record);
             await dbContext.SaveChangesAsync();
 
             return record;
         }
 
-        public virtual async Task Update(TInputModel inputModel, int id)
+        public virtual async Task UpdateAsync(TInputModel inputModel, int id)
         {
             var strategy = dbContext.Database.CreateExecutionStrategy();
             await strategy.ExecuteAsync(async () =>
@@ -66,12 +63,12 @@ namespace BankServer.Services.Base
                 using var dbContextTransaction = await dbContext.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable);
                 try
                 {
-                    var record = await GetRecord(id);
+                    var record = await GetRecordAsync(id);
                     if (record is null)
                         return;
 
-                    var updatedRecord = await GetRecord(inputModel);
-                    UpdateRecord(record, updatedRecord);
+                    var updatedRecord = await MapModel(inputModel);
+                    CopyValues(record, updatedRecord);
 
                     await dbContext.SaveChangesAsync();
                     await dbContextTransaction.CommitAsync();
@@ -84,7 +81,7 @@ namespace BankServer.Services.Base
             });
         }
 
-        public async Task Delete(int id)
+        public async Task DeleteAsync(int id)
         {
             var strategy = dbContext.Database.CreateExecutionStrategy();
             await strategy.ExecuteAsync(async () =>
@@ -92,11 +89,11 @@ namespace BankServer.Services.Base
                 using var dbContextTransaction = await dbContext.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable);
                 try
                 {
-                    var record = await GetRecord(id);
+                    var record = await GetRecordAsync(id);
                     if (record is null)
                         return;
 
-                    entities.Remove(record);
+                    dbContext.Set<TEntity>().Remove(record);
 
                     await dbContext.SaveChangesAsync();
                     await dbContextTransaction.CommitAsync();

@@ -76,15 +76,15 @@ namespace BankServer.Services
                     if (addTransactionModel.Amount <= 0.00)
                         throw new Exception($"Transaction amount can't be zero or negative!");
 
-                    var transactionType = await transactionTypesService.Get(addTransactionModel.TypeId);
+                    var transactionType = await transactionTypesService.GetAsync(addTransactionModel.TypeId);
                     if (transactionType is null)
                         throw new Exception($"Transaction type with id {addTransactionModel.BankId} was not found!");
 
-                    var bank = await banksService.Get(addTransactionModel.BankId);
+                    var bank = await banksService.GetAsync(addTransactionModel.BankId);
                     if (bank is null)
                         throw new Exception($"Bank with id {addTransactionModel.BankId} was not found!");
 
-                    var location = await locationsService.Get(addTransactionModel.LocationId);
+                    var location = await locationsService.GetAsync(addTransactionModel.LocationId);
                     if (location is null)
                         throw new Exception($"Location with id {addTransactionModel.LocationId} was not found!");
 
@@ -92,7 +92,7 @@ namespace BankServer.Services
                     if (account is null)
                         throw new Exception($"Account with number {addTransactionModel.AccountNumber} was not found!");
 
-                    var category = await categoriesService.Get(addTransactionModel.CategoryId);
+                    var category = await categoriesService.GetAsync(addTransactionModel.CategoryId);
                     if (category is null)
                         throw new Exception($"Category with id '{addTransactionModel.CategoryId}' was not found!");
 
@@ -152,7 +152,7 @@ namespace BankServer.Services
 
                     if(transaction.TransactionType!.Id != addTransactionModel.TypeId)
                     {
-                        var transactionType = await transactionTypesService.Get(addTransactionModel.TypeId);
+                        var transactionType = await transactionTypesService.GetAsync(addTransactionModel.TypeId);
                         if (transactionType is null)
                             throw new Exception($"Transaction type with id {addTransactionModel.BankId} was not found!");
 
@@ -161,7 +161,7 @@ namespace BankServer.Services
 
                     if(transaction.Bank!.Id != addTransactionModel.BankId)
                     {
-                        var bank = await banksService.Get(addTransactionModel.BankId);
+                        var bank = await banksService.GetAsync(addTransactionModel.BankId);
                         if (bank is null)
                             throw new Exception($"Bank with id {addTransactionModel.BankId} was not found!");
 
@@ -170,7 +170,7 @@ namespace BankServer.Services
 
                     if(transaction.Location!.Id != addTransactionModel.LocationId)
                     {
-                        var location = await locationsService.Get(addTransactionModel.LocationId);
+                        var location = await locationsService.GetAsync(addTransactionModel.LocationId);
                         if (location is null)
                             throw new Exception($"Location with id {addTransactionModel.LocationId} was not found!");
 
@@ -188,7 +188,7 @@ namespace BankServer.Services
 
                     if(transaction.Category!.Id != addTransactionModel.CategoryId)
                     {
-                        var category = await categoriesService.Get(addTransactionModel.CategoryId);
+                        var category = await categoriesService.GetAsync(addTransactionModel.CategoryId);
                         if (category is null)
                             throw new Exception($"Category with id '{addTransactionModel.CategoryId}' was not found!");
 

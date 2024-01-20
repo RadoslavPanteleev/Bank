@@ -8,7 +8,7 @@ namespace BankServer.Controllers.Base
     public abstract class BankControllerBase<TEntity, TInputModel, TService> : ControllerBase
         where TEntity : class
         where TInputModel : class
-        where TService : BaseService<TEntity, TInputModel>
+        where TService : RepositoryBaseService<TEntity, TInputModel>
     {
         private readonly TService service;
         public BankControllerBase(TService service)
@@ -20,7 +20,7 @@ namespace BankServer.Controllers.Base
         [HttpGet]
         public virtual async Task<ActionResult<IList<TEntity>>> GetAllAsync()
         {
-            return Ok(await service.GetAll());
+            return Ok(await service.GetAllAsync());
         }
 
         [SwaggerOperation(Summary = "Get record.")]
@@ -31,7 +31,7 @@ namespace BankServer.Controllers.Base
         [HttpGet("{id}")]
         public virtual async Task<ActionResult<TEntity>> Get([SwaggerParameter("specific id", Required = true)] int id)
         {
-            var record = await service.GetRecord(id);
+            var record = await service.GetRecordAsync(id);
             if (record is null)
                 return NotFound(id);
 
@@ -71,7 +71,7 @@ namespace BankServer.Controllers.Base
         {
             try
             {
-                await service.Update(inputModel, id);
+                await service.UpdateAsync(inputModel, id);
 
                 return Ok();
             }
@@ -93,7 +93,7 @@ namespace BankServer.Controllers.Base
         [HttpDelete("{id}")]
         public virtual async Task<ActionResult> Delete([SwaggerParameter("specific id", Required = true)] int id)
         {
-            await service.Delete(id);
+            await service.DeleteAsync(id);
             return Ok();
         }
     }

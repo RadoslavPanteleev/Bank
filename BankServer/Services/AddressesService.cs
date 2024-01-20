@@ -3,10 +3,10 @@ using BankServer.Services.Base;
 
 namespace BankServer.Services
 {
-    public class AddressesService : BaseService<Address, Address>
+    public class AddressesService : RepositoryBaseService<Address, Address>
     {
         private readonly AppDbContext bankContext;
-        public AddressesService(AppDbContext bankContext, ILogger<Address> logger) : base(bankContext.Addresses, bankContext, logger)
+        public AddressesService(AppDbContext bankContext, ILogger<Address> logger) : base(bankContext, logger)
         {
             this.bankContext = bankContext;
         }
@@ -16,12 +16,12 @@ namespace BankServer.Services
             return record.Id;
         }
 
-        protected override Task<Address> GetRecord(Address source)
+        protected override Task<Address> MapModel(Address source)
         {
             return Task.FromResult(source);
         }
 
-        protected override void UpdateRecord(Address destination, Address source)
+        protected override void CopyValues(Address destination, Address source)
         {
             destination.Description = source.Description;
         }

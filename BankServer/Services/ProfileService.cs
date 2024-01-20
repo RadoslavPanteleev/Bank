@@ -69,7 +69,7 @@ namespace BankServer.Services
 
                         if (person.AddressId != editProfileInput.AddressId)
                         {
-                            var address = await this.addressesService.Get(editProfileInput.AddressId);
+                            var address = await this.addressesService.GetAsync(editProfileInput.AddressId);
                             if (editProfileInput.AddressId > 0 && address is null)
                             {
                                 throw new Exception($"Address id {editProfileInput.AddressId} not found!");

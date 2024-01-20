@@ -3,10 +3,10 @@ using BankServer.Services.Base;
 
 namespace BankServer.Services
 {
-    public class CategoriesService : BaseService<Category, Category>
+    public class CategoriesService : RepositoryBaseService<Category, Category>
     {
         private readonly AppDbContext bankContext;
-        public CategoriesService(AppDbContext bankContext, ILogger<Category> logger) : base(bankContext.Categories, bankContext, logger)
+        public CategoriesService(AppDbContext bankContext, ILogger<Category> logger) : base(bankContext, logger)
         {
             this.bankContext = bankContext;
         }
@@ -16,12 +16,12 @@ namespace BankServer.Services
             return record.Id;
         }
 
-        protected override Task<Category> GetRecord(Category source)
+        protected override Task<Category> MapModel(Category source)
         {
             return Task.FromResult(source);
         }
 
-        protected override void UpdateRecord(Category destination, Category source)
+        protected override void CopyValues(Category destination, Category source)
         {
             destination.Description = source.Description;
         }

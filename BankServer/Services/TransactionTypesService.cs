@@ -3,11 +3,11 @@ using BankServer.Services.Base;
 
 namespace BankServer.Services
 {
-    public class TransactionTypesService : BaseService<TransactionType, TransactionType>
+    public class TransactionTypesService : RepositoryBaseService<TransactionType, TransactionType>
     {
         private readonly AppDbContext bankContext;
 
-        public TransactionTypesService(AppDbContext bankContext, ILogger<TransactionType> logger) : base(bankContext.TransactionsTypes, bankContext, logger)
+        public TransactionTypesService(AppDbContext bankContext, ILogger<TransactionType> logger) : base(bankContext, logger)
         {
             this.bankContext = bankContext;
         }
@@ -17,12 +17,12 @@ namespace BankServer.Services
             return record.Id;
         }
 
-        protected override Task<TransactionType> GetRecord(TransactionType source)
+        protected override Task<TransactionType> MapModel(TransactionType source)
         {
             return Task.FromResult(source);
         }
 
-        protected override void UpdateRecord(TransactionType destination, TransactionType source)
+        protected override void CopyValues(TransactionType destination, TransactionType source)
         {
             destination.Type = source.Type;
         }

@@ -5,20 +5,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BankServer.Services
 {
-    public class BanksService : BaseService<Bank, BankInputModel>
+    public class BanksService : RepositoryBaseService<Bank, BankInputModel>
     {
         private readonly AppDbContext bankContext;
-        public BanksService(AppDbContext bankContext, ILogger<Bank> logger) : base(bankContext.Banks, bankContext, logger)
+        public BanksService(AppDbContext bankContext, ILogger<Bank> logger) : base(bankContext, logger)
         {
             this.bankContext = bankContext;
         }
 
-        public override async Task<Bank?> GetRecord(int id)
+        public override async Task<Bank?> GetRecordAsync(int id)
         {
             return await bankContext.Banks.SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public override async Task<IList<Bank>> GetAll()
+        public override async Task<IList<Bank>> GetAllAsync()
         {
             return await bankContext.Banks.ToListAsync();
         }
@@ -28,7 +28,7 @@ namespace BankServer.Services
             return record.Id;
         }
 
-        protected override Task<Bank> GetRecord(BankInputModel source)
+        protected override Task<Bank> MapModel(BankInputModel source)
         {
             var bank = new Bank
             {
@@ -40,7 +40,7 @@ namespace BankServer.Services
             return Task.FromResult(bank);
         }
 
-        protected override void UpdateRecord(Bank destination, Bank source)
+        protected override void CopyValues(Bank destination, Bank source)
         {
             destination.Address = source.Address;
             destination.Phone = source.Phone;
