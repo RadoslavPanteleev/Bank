@@ -1,12 +1,6 @@
-﻿using BankServer.Entities;
-using BankServer.Models;
+﻿using BankServer.Models;
 using BankServer.Services;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace BankServer.Controllers
 {
@@ -14,83 +8,37 @@ namespace BankServer.Controllers
     [ApiController]
     public class AuthenticateController : ControllerBase
     {
-        private readonly AppDbContext bankContext;
-        private readonly UserManager<Person> userManager;
-        private readonly RoleManager<IdentityRole> roleManager;
-        private readonly IConfiguration _configuration;
+        private readonly AuthenticateService authenticateService;
 
         public AuthenticateController(
-            AppDbContext bankContext, 
-            UserManager<Person> userManager, 
-            RoleManager<IdentityRole> roleManager, 
-            IConfiguration configuration)
+            AuthenticateService authenticateService)
         {
-            this.bankContext = bankContext;
-            this.userManager = userManager;
-            this.roleManager = roleManager;
-            _configuration = configuration;
+            this.authenticateService = authenticateService;
         }
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] Login model)
+        public async Task<ActionResult> Login([FromBody] Login model)
         {
-            var user = await userManager.FindByNameAsync(model.Username);
-            if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
-            {
-                var userRoles = await userManager.GetRolesAsync(user);
+            var result = await authenticateService.Login(model);
+            if(result is null)
+                return Unauthorized();
 
-                var authClaims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                };
-
-                foreach (var userRole in userRoles)
-                {
-                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-                }
-
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
-
-                var token = new JwtSecurityToken(
-                    issuer: _configuration["JWT:ValidIssuer"],
-                    audience: _configuration["JWT:ValidAudience"],
-                    expires: DateTime.Now.AddHours(3),
-                    claims: authClaims,
-                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                    );
-
-                return Ok(new
-                {
-                    token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo
-                });
-            }
-            return Unauthorized();
+            return Ok(result);
         }
 
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
-            var userExists = await userManager.FindByNameAsync(model.Username);
-            if (userExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
-
-            Person user = new Person()
+            try
             {
-                UserName = model.Username,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Email = model.Email,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                Phone = model.Phone,
-            };
-
-            var result = await userManager.CreateAsync(user, model.Password);
-            if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+                await authenticateService.Register(model);
+            }
+            catch(Exception ex) 
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = ex.Message });
+            }
 
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });
         }
@@ -99,42 +47,13 @@ namespace BankServer.Controllers
         [Route("register-admin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterModel model)
         {
-            var userExists = await userManager.FindByNameAsync(model.Username);
-            if (userExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
-
-            var admins = await userManager.GetUsersInRoleAsync(UserRoles.Admin);
-            if(admins.Count > 1)
-                return StatusCode(StatusCodes.Status403Forbidden, new Response { Status = "Error", Message = "There is already registered admin!" });
-
-            //var address = await this.addressesService.Get(model.AddressId);
-            //if (model.AddressId > 0 && address is null)
-            //{
-            //    return StatusCode(StatusCodes.Status404NotFound, new Response { Status = "Error", Message = $"Address id {model.AddressId} not found!" });
-            //}
-
-            Person user = new Person()
+            try
             {
-                UserName = model.Username,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Email = model.Email,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                Phone = model.Phone,
-            };
-
-            var result = await userManager.CreateAsync(user, model.Password);
-            if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
-
-            if (!await roleManager.RoleExistsAsync(UserRoles.Admin))
-                await roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
-            if (!await roleManager.RoleExistsAsync(UserRoles.User))
-                await roleManager.CreateAsync(new IdentityRole(UserRoles.User));
-
-            if (await roleManager.RoleExistsAsync(UserRoles.Admin))
+                await authenticateService.RegisterAdmin(model);
+            }
+            catch (Exception ex)
             {
-                await userManager.AddToRoleAsync(user, UserRoles.Admin);
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = ex.Message });
             }
 
             return Ok(new Response { Status = "Success", Message = "User created successfully!" });

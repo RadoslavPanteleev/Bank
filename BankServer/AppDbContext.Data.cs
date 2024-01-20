@@ -1,10 +1,13 @@
 ﻿using BankServer.Entities;
+using BankServer.Entities.Configurations;
+using Bogus;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BankServer
 {
-    public partial class AppDbContext : IdentityDbContext<Person>
+    public partial class AppDbContext : IdentityDbContext<Entities.Person>
     {
         private void Seed(ModelBuilder builder)
         {
@@ -46,23 +49,23 @@ namespace BankServer
             builder.Entity<Bank>().HasData(new Bank { Id = 16, Name = "Токуда Банк АД", Address = "ул. Георг Вашингтон № 21 София 1000"                     , Phone = "+359 2 403 79 00; 02 40379 85" });
             builder.Entity<Bank>().HasData(new Bank { Id = 17, Name = "Общинска банка АД", Address = "ул. Врабча № 6 София 1000"                            , Phone = "+359 2 9300 111" });
 
-            builder.Entity<Address>().HasData(new Address { Id = 1, Description = "ул. Московска № 19 София 1036" });
-            builder.Entity<Address>().HasData(new Address { Id = 2, Description = "пл. Света Неделя № 7 София 1000" });
-            builder.Entity<Address>().HasData(new Address { Id = 3, Description = "ул. Околовръстен път № 260 София 1766" });
-            builder.Entity<Address>().HasData(new Address { Id = 4, Description = "бул. Витоша, № 89 Б София 1463" });
-            builder.Entity<Address>().HasData(new Address { Id = 5, Description = "бул. България № 85 София 1404" });
-            builder.Entity<Address>().HasData(new Address { Id = 6, Description = "бул. Цариградско шосе № 111П София 1784" });
-            builder.Entity<Address>().HasData(new Address { Id = 7, Description = "бул. Тодор Александров № 117 София 1303" });
-            builder.Entity<Address>().HasData(new Address { Id = 8, Description = "бул. Цариградско шосе № 87 София 1086" });
-            builder.Entity<Address>().HasData(new Address { Id = 9, Description = "р-н Лозенец, ул. Сребърна № 16 София 1407" });
-            builder.Entity<Address>().HasData(new Address { Id = 10, Description = "ул. Славянска № 2 София 1000" });
-            builder.Entity<Address>().HasData(new Address { Id = 11, Description = "ул. Димитър Хаджикоцев № 52-54 София 1421" });
-            builder.Entity<Address>().HasData(new Address { Id = 12, Description = "бул. Тодор Александров № 26 София 1303" });
-            builder.Entity<Address>().HasData(new Address { Id = 13, Description = "бул. Тодор Александров № 81-83 София 1303" });
-            builder.Entity<Address>().HasData(new Address { Id = 14, Description = "бул. Генерал Тотлебен № 8 София 1606" });
-            builder.Entity<Address>().HasData(new Address { Id = 15, Description = "ул. Дякон Игнатий № 1 София 1000" });
-            builder.Entity<Address>().HasData(new Address { Id = 16, Description = "ул. Георг Вашингтон № 21 София 1000" });
-            builder.Entity<Address>().HasData(new Address { Id = 17, Description = "ул. Врабча № 6 София 1000" });
+            builder.Entity<Entities.Address>().HasData(new Entities.Address { Id = 1, Description = "ул. Московска № 19 София 1036" });
+            builder.Entity<Entities.Address>().HasData(new Entities.Address { Id = 2, Description = "пл. Света Неделя № 7 София 1000" });
+            builder.Entity<Entities.Address>().HasData(new Entities.Address { Id = 3, Description = "ул. Околовръстен път № 260 София 1766" });
+            builder.Entity<Entities.Address>().HasData(new Entities.Address { Id = 4, Description = "бул. Витоша, № 89 Б София 1463" });
+            builder.Entity<Entities.Address>().HasData(new Entities.Address { Id = 5, Description = "бул. България № 85 София 1404" });
+            builder.Entity<Entities.Address>().HasData(new Entities.Address { Id = 6, Description = "бул. Цариградско шосе № 111П София 1784" });
+            builder.Entity<Entities.Address>().HasData(new Entities.Address { Id = 7, Description = "бул. Тодор Александров № 117 София 1303" });
+            builder.Entity<Entities.Address>().HasData(new Entities.Address { Id = 8, Description = "бул. Цариградско шосе № 87 София 1086" });
+            builder.Entity<Entities.Address>().HasData(new Entities.Address { Id = 9, Description = "р-н Лозенец, ул. Сребърна № 16 София 1407" });
+            builder.Entity<Entities.Address>().HasData(new Entities.Address { Id = 10, Description = "ул. Славянска № 2 София 1000" });
+            builder.Entity<Entities.Address>().HasData(new Entities.Address { Id = 11, Description = "ул. Димитър Хаджикоцев № 52-54 София 1421" });
+            builder.Entity<Entities.Address>().HasData(new Entities.Address { Id = 12, Description = "бул. Тодор Александров № 26 София 1303" });
+            builder.Entity<Entities.Address>().HasData(new Entities.Address { Id = 13, Description = "бул. Тодор Александров № 81-83 София 1303" });
+            builder.Entity<Entities.Address>().HasData(new Entities.Address { Id = 14, Description = "бул. Генерал Тотлебен № 8 София 1606" });
+            builder.Entity<Entities.Address>().HasData(new Entities.Address { Id = 15, Description = "ул. Дякон Игнатий № 1 София 1000" });
+            builder.Entity<Entities.Address>().HasData(new Entities.Address { Id = 16, Description = "ул. Георг Вашингтон № 21 София 1000" });
+            builder.Entity<Entities.Address>().HasData(new Entities.Address { Id = 17, Description = "ул. Врабча № 6 София 1000" });
 
             builder.Entity<Location>().HasData(new Location { Id = 1, Name = "Vilanova de Sau", AddressId = 1, Latitude = 41.947, Longitude = 2.3844 });
             builder.Entity<Location>().HasData(new Location { Id = 2, Name = "Dolno Palčište", AddressId = 2, Latitude = 41.96859, Longitude = 20.92899 });
@@ -81,6 +84,80 @@ namespace BankServer
             builder.Entity<Location>().HasData(new Location { Id = 15, Name = "Pochidia", AddressId = 15, Latitude = 46.04318, Longitude = 27.58746 });
             builder.Entity<Location>().HasData(new Location { Id = 16, Name = "La Blanca", AddressId = 16, Latitude = 16.59482, Longitude = -94.69256 });
             builder.Entity<Location>().HasData(new Location { Id = 17, Name = "São Roque", AddressId = 17, Latitude = -23.52917, Longitude = -47.13528 });
+
+            builder.ApplyConfiguration(new RoleConfiguration());
+            builder.ApplyConfiguration(new UsersConfiguration());
+            builder.ApplyConfiguration(new UsersWithRolesConfiguration());
+
+            
+            // 100 users generate
+            var faker = new Faker<Entities.Person>()
+                .RuleFor(u => u.Id, f => f.Random.Guid().ToString())
+                .RuleFor(u => u.UserName, f => f.Internet.UserName().ToLower())
+                .RuleFor(u => u.NormalizedUserName, (f, u) => u.UserName.ToUpper())
+                .RuleFor(u => u.FirstName, f => f.Name.FirstName())
+                .RuleFor(u => u.LastName, f => f.Name.LastName())
+                .RuleFor(u => u.Email, f => f.Internet.Email().ToLower())
+                .RuleFor(u => u.NormalizedEmail, (f, u) => u.Email.ToUpper())
+                .RuleFor(u => u.Phone, f => f.Phone.PhoneNumber())
+                .RuleFor(u => u.EmailConfirmed, true)
+                .RuleFor(u => u.PhoneNumberConfirmed, true)
+                .RuleFor(u => u.SecurityStamp, f => f.Random.Guid().ToString("D"))
+                .RuleFor(u => u.PasswordHash, (f, u) => new PasswordHasher<Entities.Person>().HashPassword(u, "Test1234."));
+
+            ;
+            var users = faker.Generate(100);
+            builder.Entity<Entities.Person>().HasData(users);
+
+            var roles = users.SelectMany(user =>
+                Enumerable.Range(1, 1).Select(i => new IdentityUserRole<string>
+                {
+                    UserId = user.Id,
+                    RoleId = RoleConfiguration.UserRoleId
+                })
+            ).ToList();
+            builder.Entity<IdentityUserRole<string>>().HasData(roles);
+
+            // Random 1 - 10 accounts for 100 users
+            var accounts = users.SelectMany(user =>
+            Enumerable.Range(1, new Faker().Random.Number(1, 10)).Select(i => new Account
+                {
+                AccountNumber = Guid.NewGuid(),
+                AccountName = new Faker().Finance.AccountName(),
+                PersonId = user.Id
+                })
+            ).ToList();
+            builder.Entity<Account>().HasData(accounts);
+
+            // Random 1 - 100 transactions for all accounts
+            int id = 1;
+            var transactions = new List<Transaction>();
+            
+            Parallel.ForEach(accounts, account =>
+            {
+                var numberOfTransactions = new Faker().Random.Number(1, 10);
+                var accountTransactions = Enumerable.Range(1, numberOfTransactions).Select(i =>
+                {
+                    var transaction = new Transaction
+                    {
+                        Id = System.Threading.Interlocked.Increment(ref id),
+                        Date = DateTime.UtcNow.AddDays(-new Faker().Random.Number(1, 30)), // Transaction dates are in the past for example purposes
+                        Amount = (double)new Faker().Finance.Amount(),
+                        TransactionTypeId = new Faker().Random.Number(1, 6),
+                        BankId = new Faker().Random.Number(1, 17),
+                        LocationId = new Faker().Random.Number(1, 17),
+                        AccountId = account.AccountNumber,
+                        CategoryId = new Faker().Random.Number(1, 12),
+                    };
+                    return transaction;
+                });
+                lock (transactions)
+                {
+                    transactions.AddRange(accountTransactions);
+                }
+            });
+            builder.Entity<Transaction>().HasData(transactions);
+
         }
     }
 }

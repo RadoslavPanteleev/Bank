@@ -80,6 +80,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 // Registers
+builder.Services.AddTransient<AuthenticateService>();
 builder.Services.AddTransient<AccountsService>();
 builder.Services.AddTransient<AddressesService>();
 builder.Services.AddTransient<BanksService>();
