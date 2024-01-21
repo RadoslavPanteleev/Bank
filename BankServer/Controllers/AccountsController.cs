@@ -27,7 +27,7 @@ namespace BankServer.Controllers
         [SwaggerOperation(Summary = "Get all accounts for logged user.")]
         [SwaggerResponse(StatusCodes.Status401Unauthorized, Description = "You must be signed to use this resource!")]
         [HttpGet]
-        public virtual async Task<ActionResult<IList<Account>>> GetAllAsync()
+        public async Task<ActionResult<IList<Account>>> GetAllAsync()
         {
             var person = await userManager.FindByNameAsync(User.FindFirstValue(ClaimTypes.Name));
             if (person is null)
@@ -42,7 +42,7 @@ namespace BankServer.Controllers
         [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "You must be with admin role to use this resource!")]
         [SwaggerResponse(StatusCodes.Status404NotFound, Description = "if not found")]
         [HttpGet("{accountNumber}")]
-        public virtual async Task<ActionResult<Account?>> GetByAccountNumber([SwaggerParameter("specific accountNumber", Required = true)] Guid accountNumber)
+        public async Task<ActionResult<Account?>> GetByAccountNumber([SwaggerParameter("specific accountNumber", Required = true)] Guid accountNumber)
         {
             var person = await userManager.FindByNameAsync(User.FindFirstValue(ClaimTypes.Name));
             if (person is null)
@@ -61,7 +61,7 @@ namespace BankServer.Controllers
         [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "You must be with admin role to use this resource!")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "if error occured")]
         [HttpPost]
-        public virtual async Task<ActionResult<Account>> CreateAccount([FromBody] AccountInputModel inputModel)
+        public async Task<ActionResult<Account>> CreateAccount([FromBody] AccountInputModel inputModel)
         {
             var person = await userManager.FindByNameAsync(User.FindFirstValue(ClaimTypes.Name));
             if (person is null)
@@ -88,7 +88,7 @@ namespace BankServer.Controllers
         [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "You must be with admin role to use this resource!")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "if error occured")]
         [HttpPut("{accountNumber}")]
-        public virtual async Task<ActionResult<Account?>> UpdateAccount([SwaggerParameter("specific id", Required = true)] Guid accountNumber, [FromBody] AccountInputModel inputModel)
+        public async Task<ActionResult<Account?>> UpdateAccount([SwaggerParameter("specific id", Required = true)] Guid accountNumber, [FromBody] AccountInputModel inputModel)
         {
             var person = await userManager.FindByNameAsync(User.FindFirstValue(ClaimTypes.Name));
             if (person is null)
@@ -115,7 +115,7 @@ namespace BankServer.Controllers
         [SwaggerResponse(StatusCodes.Status403Forbidden, Description = "You must be with admin role to use this resource!")]
         [SwaggerResponse(StatusCodes.Status500InternalServerError, Description = "if not found or other server internal error")]
         [HttpDelete("{accountNumber}")]
-        public virtual async Task<ActionResult> Delete([SwaggerParameter("specific id", Required = true)] Guid accountNumber)
+        public async Task<ActionResult> Delete([SwaggerParameter("specific id", Required = true)] Guid accountNumber)
         {
             try
             {

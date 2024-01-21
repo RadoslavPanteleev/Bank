@@ -1,6 +1,7 @@
 using BankServer;
 using BankServer.Entities;
 using BankServer.Services;
+using BankServer.Services.Reports;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -91,7 +92,7 @@ builder.Services.AddTransient<TransactionsService>();
 builder.Services.AddTransient<TransactionTypesService>();
 
 // Reports
-
+builder.Services.AddTransient<TransactionsByLocationReportService>();
 
 var app = builder.Build();
 
