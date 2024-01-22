@@ -92,7 +92,12 @@ builder.Services.AddTransient<TransactionsService>();
 builder.Services.AddTransient<TransactionTypesService>();
 
 // Reports
+builder.Services.AddTransient<TransactionsByBankReportService>();
+builder.Services.AddTransient<TransactionsByCategoryReportService>();
 builder.Services.AddTransient<TransactionsByLocationReportService>();
+builder.Services.AddTransient<TransactionsByPersonReportService>();
+builder.Services.AddTransient<TransactionsByTypeReportService>();
+builder.Services.AddTransient<TransactionsHistoryReportService>();
 
 var app = builder.Build();
 
